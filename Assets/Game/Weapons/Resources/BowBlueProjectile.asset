@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d55b442ed72d4671bdb7ea613483f55e, type: 3}
+  m_Name: BowBlueProjectile
+  m_EditorClassIdentifier: 
+  itemId: 4b35c994-0b10-485d-8ca2-e4a9b2d17d49
+  displayName: Blue Bow
+  description: 
+  icon: {fileID: 21300000, guid: f8078c2bb5ee88d4a9472f76e501e0f3, type: 3}
+  pickup: {fileID: 5493582814467032321, guid: 633db4f25a1ed40cfb7abd63ad42ace9, type: 3}
+  isStackable: 0
+  price: 120
+  allowedEquipLocation: 5
+  range: 8
+  flatDamageBonus: 10
+  percentageBonus: 0
+  timeBetweenAttacks: 3
+  isRightHanded: 1
+  equippedPrefab: {fileID: 2204071186455581795, guid: eb9756453d4274c1da58215e4abe2586, type: 3}
+  animatorOverride: {fileID: 22100000, guid: 52407445f02434abfb2f6eac2958e36a, type: 2}
+  projectile: {fileID: 1173233571603809895, guid: 791046af8350541e5b89e6bed07f996e, type: 3}
