@@ -4,7 +4,7 @@ namespace RPG.Shops
 {
   public struct ShopItem
   {
-    public InventoryItem Item;
+    public InventoryItem InventoryItem;
     public int Availability;
     public float Price;
     public int QuantityInTransaction;

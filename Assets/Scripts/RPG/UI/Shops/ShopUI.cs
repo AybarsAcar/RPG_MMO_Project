@@ -10,6 +10,7 @@ namespace RPG.UI.Shops
     [SerializeField] private TextMeshProUGUI shopName;
     [SerializeField] private Transform shoppingListRoot;
     [SerializeField] private RowUI rowPrefab;
+    [SerializeField] private TextMeshProUGUI totalField;
 
     private Shopper _shopper;
     private Shop _currentShop;
@@ -32,6 +33,12 @@ namespace RPG.UI.Shops
 
     private void HandleShopChanged()
     {
+      // remove subscription from the old shop
+      if (_currentShop != null)
+      {
+        _currentShop.ONChange -= RefreshUI;
+      }
+      
       _currentShop = _shopper.ActiveShop;
 
       gameObject.SetActive(_currentShop != null);
@@ -39,6 +46,9 @@ namespace RPG.UI.Shops
       if (_currentShop == null) return;
 
       shopName.text = _currentShop.ShopName;
+
+      // subscribe to RefreshUI method
+      _currentShop.ONChange += RefreshUI;
 
       RefreshUI();
     }
@@ -59,8 +69,19 @@ namespace RPG.UI.Shops
       {
         var row  =Instantiate<RowUI>(rowPrefab, parent: shoppingListRoot);
 
-        row.Setup(item);
+        row.Setup(_currentShop, item);
       }
+      
+      // update the Total Cost field
+      totalField.text = $"Total: ${_currentShop.GetTransactionTotal():n}";
+    }
+
+    /// <summary>
+    /// called from the buy / sell button
+    /// </summary>
+    public void ConfirmTransaction()
+    {
+      _currentShop.ConfirmTransaction();
     }
   }
 }
