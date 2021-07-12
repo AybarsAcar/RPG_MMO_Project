@@ -149,22 +149,15 @@ namespace RPG.Shops
     /// <returns></returns>
     public bool CanTransact()
     {
+      if (!_isBuyingMode) return true;
+
       // Empty transaction
-      if (IsTransactionEmpty())
-      {
-        return false;
-      }
+      if (IsTransactionEmpty()) return false;
 
       // Not sufficient funds
-      if (!HasSufficientFunds())
-      {
-        return false;
-      }
+      if (!HasSufficientFunds()) return false;
 
-      if (!HasInventorySpace())
-      {
-        return false;
-      }
+      if (!HasInventorySpace()) return false;
 
       // Not sufficient inventory space
       return true;
@@ -178,6 +171,8 @@ namespace RPG.Shops
     /// <returns></returns>
     private bool HasInventorySpace()
     {
+      if (!_isBuyingMode) return true;
+
       var playerInventory = _currentShopper.GetComponent<Inventory>();
 
       if (playerInventory == null) return false;
@@ -280,22 +275,14 @@ namespace RPG.Shops
         // to prevent non-stackable item from stacking
         for (int i = 0; i < quantity; i++)
         {
-          if (playerBalance.CurrentBalance < price)
+          if (_isBuyingMode)
           {
-            break;
+            PurchaseItem(shopperInventory, playerBalance, inventoryItem, price);
           }
-
-          var success = shopperInventory.AddToFirstEmptySlot(inventoryItem, 1);
-
-          if (success)
+          else
           {
-            // remove from transaction
-            AddToTransaction(inventoryItem, -1);
-
-            _stock[inventoryItem]--;
-
-            // Debiting or crediting of funds
-            playerBalance.UpdateBalance(-price);
+            // selling mode
+            SellItem(shopperInventory, playerBalance, inventoryItem, price);
           }
         }
       }
@@ -304,6 +291,71 @@ namespace RPG.Shops
       _transaction.Clear();
 
       ONChange?.Invoke();
+    }
+
+    /// <summary>
+    /// implements the selling logic
+    /// items is first removed from the transaction dictionary foreach item
+    /// </summary>
+    private void SellItem(Inventory shopperInventory, PlayerBalance playerBalance, InventoryItem inventoryItem,
+      float price)
+    {
+      var slot = FindFirstItemSlot(shopperInventory, inventoryItem);
+
+      if (slot == -1) return;
+
+      // remove from the transaction
+      AddToTransaction(inventoryItem, -1);
+
+      // remove the item from the player inventory
+      shopperInventory.RemoveFromSlot(slot, 1);
+
+      // add the item to the shop stock
+      _stock[inventoryItem]++;
+
+      // pay the player
+      playerBalance.UpdateBalance(price);
+    }
+
+    /// <summary>
+    /// returns -1 if the item does not exist
+    /// </summary>
+    /// <param name="shopperInventory"></param>
+    /// <param name="inventoryItem"></param>
+    /// <returns></returns>
+    private int FindFirstItemSlot(Inventory shopperInventory, InventoryItem inventoryItem)
+    {
+      for (int i = 0; i < shopperInventory.GetSize(); i++)
+      {
+        if (inventoryItem == shopperInventory.GetItemInSlot(i))
+        {
+          return i;
+        }
+      }
+
+      return -1;
+    }
+
+    private void PurchaseItem(Inventory shopperInventory, PlayerBalance playerBalance, InventoryItem inventoryItem,
+      float price)
+    {
+      if (playerBalance.CurrentBalance < price)
+      {
+        return;
+      }
+
+      var success = shopperInventory.AddToFirstEmptySlot(inventoryItem, 1);
+
+      if (success)
+      {
+        // remove from transaction
+        AddToTransaction(inventoryItem, -1);
+
+        _stock[inventoryItem]--;
+
+        // Debiting or crediting of funds
+        playerBalance.UpdateBalance(-price);
+      }
     }
 
     public bool HandleRaycast(PlayerController callingController)
