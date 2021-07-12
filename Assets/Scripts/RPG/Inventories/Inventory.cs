@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RPG.Saving;
 using UnityEngine;
 
@@ -14,15 +15,15 @@ namespace RPG.Inventories
   {
     // CONFIG DATA
     [Tooltip("Allowed size")] [SerializeField]
-    int inventorySize = 16;
+    private int inventorySize = 16;
 
     // STATE
-    InventorySlot[] slots;
+    InventorySlot[] _slots;
 
     public struct InventorySlot
     {
-      public InventoryItem item;
-      public int number;
+      public InventoryItem Item;
+      public int Number;
     }
 
     // PUBLIC
@@ -50,11 +51,61 @@ namespace RPG.Inventories
     }
 
     /// <summary>
+    /// returns true if we have empty space
+    /// make sure to take stackable items into consideration
+    /// </summary>
+    /// <param name="items"></param>
+    /// <returns></returns>
+    public bool HasSpaceFor(IEnumerable<InventoryItem> items)
+    {
+      var freeSlots = FreeSlotCount();
+      var seenStackableItems = new List<InventoryItem>();
+
+      foreach (var inventoryItem in items)
+      {
+        if (inventoryItem.IsStackable)
+        {
+          // already have the item in the inventory
+          if (HasItem(inventoryItem)) continue;
+
+          // or already seen it in the items list
+          if (seenStackableItems.Contains(inventoryItem)) continue;
+
+          seenStackableItems.Add(inventoryItem);
+        }
+
+        if (freeSlots <= 0) return false;
+
+        freeSlots--;
+      }
+
+      return true;
+    }
+
+    /// <summary>
+    /// inventorySlot.number == 0 means it's empty
+    /// </summary>
+    /// <returns>the number of free slots available in our inventory</returns>
+    public int FreeSlotCount()
+    {
+      var count = 0;
+      foreach (var inventorySlot in _slots)
+      {
+        if (inventorySlot.Number == 0)
+        {
+          count++;
+        }
+      }
+
+      return count;
+    }
+
+    /// <summary>
     /// How many slots are in the inventory?
     /// </summary>
     public int GetSize()
     {
-      return slots.Length;
+      return _slots.Length;
     }
 
     /// <summary>
@@ -72,8 +123,8 @@ namespace RPG.Inventories
         return false;
       }
 
-      slots[i].item = item;
-      slots[i].number += number;
+      _slots[i].Item = item;
+      _slots[i].Number += number;
       if (inventoryUpdated != null)
       {
         inventoryUpdated();
@@ -87,9 +138,9 @@ namespace RPG.Inventories
     /// </summary>
     public bool HasItem(InventoryItem item)
     {
-      for (int i = 0; i < slots.Length; i++)
+      for (int i = 0; i < _slots.Length; i++)
       {
-        if (object.ReferenceEquals(slots[i].item, item))
+        if (object.ReferenceEquals(_slots[i].Item, item))
         {
           return true;
         }
@@ -103,7 +154,7 @@ namespace RPG.Inventories
     /// </summary>
     public InventoryItem GetItemInSlot(int slot)
     {
-      return slots[slot].item;
+      return _slots[slot].Item;
     }
 
     /// <summary>
@@ -111,7 +162,7 @@ namespace RPG.Inventories
     /// </summary>
     public int GetNumberInSlot(int slot)
     {
-      return slots[slot].number;
+      return _slots[slot].Number;
     }
 
     /// <summary>
@@ -120,11 +171,11 @@ namespace RPG.Inventories
     /// </summary>
     public void RemoveFromSlot(int slot, int number)
     {
-      slots[slot].number -= number;
-      if (slots[slot].number <= 0)
+      _slots[slot].Number -= number;
+      if (_slots[slot].Number <= 0)
       {
-        slots[slot].number = 0;
-        slots[slot].item = null;
+        _slots[slot].Number = 0;
+        _slots[slot].Item = null;
       }
 
       if (inventoryUpdated != null)
@@ -144,7 +195,7 @@ namespace RPG.Inventories
     /// <returns>True if the item was added anywhere in the inventory.</returns>
     public bool AddItemToSlot(int slot, InventoryItem item, int number)
     {
-      if (slots[slot].item != null)
+      if (_slots[slot].Item != null)
       {
         return AddToFirstEmptySlot(item, number);
         ;
@@ -156,8 +207,8 @@ namespace RPG.Inventories
         slot = i;
       }
 
-      slots[slot].item = item;
-      slots[slot].number += number;
+      _slots[slot].Item = item;
+      _slots[slot].Number += number;
       if (inventoryUpdated != null)
       {
         inventoryUpdated();
@@ -170,7 +221,7 @@ namespace RPG.Inventories
 
     private void Awake()
     {
-      slots = new InventorySlot[inventorySize];
+      _slots = new InventorySlot[inventorySize];
     }
 
     /// <summary>
@@ -194,9 +245,9 @@ namespace RPG.Inventories
     /// <returns>-1 if all slots are full.</returns>
     private int FindEmptySlot()
     {
-      for (int i = 0; i < slots.Length; i++)
+      for (int i = 0; i < _slots.Length; i++)
       {
-        if (slots[i].item == null)
+        if (_slots[i].Item == null)
         {
           return i;
         }
@@ -216,9 +267,9 @@ namespace RPG.Inventories
         return -1;
       }
 
-      for (int i = 0; i < slots.Length; i++)
+      for (int i = 0; i < _slots.Length; i++)
       {
-        if (object.ReferenceEquals(slots[i].item, item))
+        if (object.ReferenceEquals(_slots[i].Item, item))
         {
           return i;
         }
@@ -239,10 +290,10 @@ namespace RPG.Inventories
       var slotStrings = new InventorySlotRecord[inventorySize];
       for (int i = 0; i < inventorySize; i++)
       {
-        if (slots[i].item != null)
+        if (_slots[i].Item != null)
         {
-          slotStrings[i].itemID = slots[i].item.ItemId;
-          slotStrings[i].number = slots[i].number;
+          slotStrings[i].itemID = _slots[i].Item.ItemId;
+          slotStrings[i].number = _slots[i].Number;
         }
       }
 
@@ -254,8 +305,8 @@ namespace RPG.Inventories
       var slotStrings = (InventorySlotRecord[]) state;
       for (int i = 0; i < inventorySize; i++)
       {
-        slots[i].item = InventoryItem.GetFromID(slotStrings[i].itemID);
-        slots[i].number = slotStrings[i].number;
+        _slots[i].Item = InventoryItem.GetFromID(slotStrings[i].itemID);
+        _slots[i].Number = slotStrings[i].number;
       }
 
       if (inventoryUpdated != null)

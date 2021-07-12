@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using RPG.Control;
 using RPG.Core.Util;
 using RPG.Inventories;
@@ -17,10 +16,14 @@ namespace RPG.Shops
     [Serializable]
     private struct StockConfig
     {
-      public InventoryItem InventoryItem;
+      public InventoryItem InventoryItem; // our Scriptable object
       public int InitialStock;
       [Range(0, 100)] public float BuyingDiscountPercentage;
     }
+
+    // so the player will be able to sell the item for the 60% of its original price
+    [Tooltip("The value is a fraction")] [SerializeField] [Range(0, 1)]
+    private float sellingRate = 0.6f;
 
     [SerializeField] private StockConfig[] stockConfigs;
 
@@ -28,9 +31,24 @@ namespace RPG.Shops
     public string ShopName => shopName;
 
     private Dictionary<InventoryItem, int> _transaction = new Dictionary<InventoryItem, int>();
+
+    // keeps track of the shop stock
+    private Dictionary<InventoryItem, int> _stock = new Dictionary<InventoryItem, int>();
     private Shopper _currentShopper;
 
+    private bool _isBuyingMode = true;
+    public bool IsBuyingMode => _isBuyingMode;
+
     public event Action ONChange;
+
+    private void Awake()
+    {
+      // initialise the stock dictionary
+      foreach (var stockConfig in stockConfigs)
+      {
+        _stock[stockConfig.InventoryItem] = stockConfig.InitialStock;
+      }
+    }
 
     public void SetShopper(Shopper shopper)
     {
@@ -55,11 +73,54 @@ namespace RPG.Shops
         yield return new ShopItem
         {
           InventoryItem = config.InventoryItem,
-          Availability = config.InitialStock,
-          Price = config.InventoryItem.Price * (1 - (config.BuyingDiscountPercentage / 100)),
+          Availability = CalculateAvailability(config.InventoryItem),
+          Price = CalculatePrice(config),
           QuantityInTransaction = quantityInTransaction,
         };
       }
+    }
+
+    /// <summary>
+    /// returns the stock availability in the shop if in buying mode
+    /// returns the stock in player inventory if in selling mode
+    /// </summary>
+    /// <param name="config"></param>
+    /// <returns></returns>
+    private int CalculateAvailability(InventoryItem inventoryItem)
+    {
+      if (_isBuyingMode)
+      {
+        return _stock[inventoryItem];
+      }
+
+      return CountItemsInInventory(inventoryItem);
+    }
+
+    private int CountItemsInInventory(InventoryItem inventoryItem)
+    {
+      var playerInventory = _currentShopper.GetComponent<Inventory>();
+      if (playerInventory == null) return 0;
+
+      var count = 0;
+      for (int i = 0; i < playerInventory.GetSize(); i++)
+      {
+        if (inventoryItem == playerInventory.GetItemInSlot(i))
+        {
+          count += playerInventory.GetNumberInSlot(i);
+        }
+      }
+
+      return count;
+    }
+
+    private float CalculatePrice(StockConfig config)
+    {
+      if (_isBuyingMode)
+      {
+        return config.InventoryItem.Price * (1 - (config.BuyingDiscountPercentage / 100));
+      }
+
+      return config.InventoryItem.Price * sellingRate;
     }
 
     public void SelectFilter(ItemCategory category)
@@ -71,18 +132,84 @@ namespace RPG.Shops
       return ItemCategory.None;
     }
 
+    /// <summary>
+    /// this method is basically a setter for _isBuyingMode
+    /// plus it broadcasts the ONChange events
+    /// </summary>
+    /// <param name="isBuying"></param>
     public void SelectMode(bool isBuying)
     {
+      _isBuyingMode = isBuying;
+      ONChange?.Invoke();
     }
 
-    public bool IsBuyingMode()
-    {
-      return true;
-    }
-
+    /// <summary>
+    /// used to disable the button and give errors when we can't proceed with the transaction
+    /// </summary>
+    /// <returns></returns>
     public bool CanTransact()
     {
+      // Empty transaction
+      if (IsTransactionEmpty())
+      {
+        return false;
+      }
+
+      // Not sufficient funds
+      if (!HasSufficientFunds())
+      {
+        return false;
+      }
+
+      if (!HasInventorySpace())
+      {
+        return false;
+      }
+
+      // Not sufficient inventory space
       return true;
+    }
+
+    /// <summary>
+    /// Checks whether the player have enough slots available in their inventory
+    /// to ConfirmTransaction
+    /// flattens the list
+    /// </summary>
+    /// <returns></returns>
+    private bool HasInventorySpace()
+    {
+      var playerInventory = _currentShopper.GetComponent<Inventory>();
+
+      if (playerInventory == null) return false;
+
+      var flatList = new List<InventoryItem>();
+
+      foreach (var shopItem in GetAllItems())
+      {
+        var inventoryItem = shopItem.InventoryItem;
+        var quantity = shopItem.QuantityInTransaction; // 0 if not in transaction so it skips the loop
+
+        for (int i = 0; i < quantity; i++)
+        {
+          flatList.Add(inventoryItem);
+        }
+      }
+
+      return playerInventory.HasSpaceFor(flatList);
+    }
+
+    public bool HasSufficientFunds()
+    {
+      var playerBalance = _currentShopper.GetComponent<PlayerBalance>();
+
+      if (playerBalance == null) return false;
+
+      return playerBalance.CurrentBalance >= GetTransactionTotal();
+    }
+
+    public bool IsTransactionEmpty()
+    {
+      return _transaction.Count == 0;
     }
 
     public float GetTransactionTotal()
@@ -110,7 +237,18 @@ namespace RPG.Shops
         _transaction[item] = 0;
       }
 
-      _transaction[item] += quantity;
+      var availability = CalculateAvailability(item);
+      print(availability);
+      if (_transaction[item] + quantity > availability)
+      {
+        // we dont have enough stock
+        // set the transaction item equal to the maximum we can have
+        _transaction[item] = availability;
+      }
+      else
+      {
+        _transaction[item] += quantity;
+      }
 
       // so the quantity won't go below 0
       if (_transaction[item] <= 0)
@@ -154,14 +292,18 @@ namespace RPG.Shops
             // remove from transaction
             AddToTransaction(inventoryItem, -1);
 
+            _stock[inventoryItem]--;
+
             // Debiting or crediting of funds
             playerBalance.UpdateBalance(-price);
           }
         }
       }
 
-      // clear the transaction as a safe
+      // clear the transaction as safety
       _transaction.Clear();
+
+      ONChange?.Invoke();
     }
 
     public bool HandleRaycast(PlayerController callingController)
