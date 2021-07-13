@@ -48,6 +48,10 @@ namespace RPG.Inventories
     private float price;
     public float Price => price;
 
+    [Tooltip("The Category of the inventory item, category is none if not assigned")] [SerializeField]
+    private ItemCategory category = ItemCategory.None;
+    public ItemCategory Category => category;
+
     // STATE
     static Dictionary<string, InventoryItem> itemLookupCache;
 

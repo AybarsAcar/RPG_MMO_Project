@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using RPG.Control;
 using RPG.Core.Util;
 using RPG.Inventories;
@@ -39,6 +40,9 @@ namespace RPG.Shops
     private bool _isBuyingMode = true;
     public bool IsBuyingMode => _isBuyingMode;
 
+    private ItemCategory filter = ItemCategory.None;
+    public ItemCategory Filter => filter;
+
     public event Action ONChange;
 
     private void Awake()
@@ -57,7 +61,7 @@ namespace RPG.Shops
 
     public IEnumerable<ShopItem> GetFilteredItems()
     {
-      return GetAllItems();
+      return GetAllItems().Where(item => filter == ItemCategory.None || filter == item.InventoryItem.Category);
     }
 
     /// <summary>
@@ -125,11 +129,8 @@ namespace RPG.Shops
 
     public void SelectFilter(ItemCategory category)
     {
-    }
-
-    public ItemCategory GetFilter()
-    {
-      return ItemCategory.None;
+      filter = category;
+      ONChange?.Invoke();
     }
 
     /// <summary>
