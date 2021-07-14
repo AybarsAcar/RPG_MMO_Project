@@ -1,4 +1,5 @@
 using System;
+using RPG.Saving;
 using UnityEngine;
 
 namespace RPG.Inventories
@@ -7,7 +8,7 @@ namespace RPG.Inventories
   /// this class will keep track of Player's money
   /// attached to the Player prefab
   /// </summary>
-  public class PlayerBalance : MonoBehaviour
+  public class PlayerBalance : MonoBehaviour, ISavable
   {
     [SerializeField] private float startingBalance = 100f;
 
@@ -31,6 +32,16 @@ namespace RPG.Inventories
 
       // broadcast the balance change
       ONChange?.Invoke();
+    }
+
+    public object CaptureState()
+    {
+      return _currentBalance;
+    }
+
+    public void RestoreState(object state)
+    {
+      _currentBalance = (float) state;
     }
   }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using RPG.Control;
 using RPG.Core.Util;
 using RPG.Inventories;
+using RPG.Saving;
+using RPG.Stats;
 using UnityEngine;
 
 namespace RPG.Shops
@@ -12,14 +14,15 @@ namespace RPG.Shops
   /// on the shop keeper or the object that requires to behave like the shop
   /// this class also determines which items a shop will have
   /// </summary>
-  public class Shop : MonoBehaviour, IRaycastable
+  public class Shop : MonoBehaviour, IRaycastable, ISavable
   {
     [Serializable]
-    private struct StockConfig
+    private class StockConfig
     {
       public InventoryItem InventoryItem; // our Scriptable object
       public int InitialStock;
       [Range(0, 100)] public float BuyingDiscountPercentage;
+      public int LevelToUnlock = 0;
     }
 
     // so the player will be able to sell the item for the 60% of its original price
@@ -34,7 +37,8 @@ namespace RPG.Shops
     private Dictionary<InventoryItem, int> _transaction = new Dictionary<InventoryItem, int>();
 
     // keeps track of the shop stock
-    private Dictionary<InventoryItem, int> _stock = new Dictionary<InventoryItem, int>();
+    private Dictionary<InventoryItem, int> _stockSold = new Dictionary<InventoryItem, int>();
+
     private Shopper _currentShopper;
 
     private bool _isBuyingMode = true;
@@ -45,20 +49,18 @@ namespace RPG.Shops
 
     public event Action ONChange;
 
-    private void Awake()
-    {
-      // initialise the stock dictionary
-      foreach (var stockConfig in stockConfigs)
-      {
-        _stock[stockConfig.InventoryItem] = stockConfig.InitialStock;
-      }
-    }
 
     public void SetShopper(Shopper shopper)
     {
       _currentShopper = shopper;
     }
 
+    /// <summary>
+    /// returns the items if the inventory item category equals to the selected filter
+    /// or returns all if filter == ItemCategory.None
+    /// used to display the RowUI based  on the filters selected
+    /// </summary>
+    /// <returns></returns>
     public IEnumerable<ShopItem> GetFilteredItems()
     {
       return GetAllItems().Where(item => filter == ItemCategory.None || filter == item.InventoryItem.Category);
@@ -70,34 +72,88 @@ namespace RPG.Shops
     /// <returns>Shop items as enumerable</returns>
     public IEnumerable<ShopItem> GetAllItems()
     {
-      foreach (var config in stockConfigs)
+      var pricesDictionary = GetPrices();
+      var availabilitiesDictionary = GetAvailabilities();
+
+      foreach (var inventoryItem in availabilitiesDictionary.Keys)
       {
-        _transaction.TryGetValue(config.InventoryItem, out var quantityInTransaction);
+        if (availabilitiesDictionary[inventoryItem] <= 0) continue;
+
+        _transaction.TryGetValue(inventoryItem, out var quantityInTransaction);
 
         yield return new ShopItem
         {
-          InventoryItem = config.InventoryItem,
-          Availability = CalculateAvailability(config.InventoryItem),
-          Price = CalculatePrice(config),
+          InventoryItem = inventoryItem,
+          Availability = availabilitiesDictionary[inventoryItem],
+          Price = pricesDictionary[inventoryItem],
           QuantityInTransaction = quantityInTransaction,
         };
       }
     }
 
-    /// <summary>
-    /// returns the stock availability in the shop if in buying mode
-    /// returns the stock in player inventory if in selling mode
-    /// </summary>
-    /// <param name="config"></param>
-    /// <returns></returns>
-    private int CalculateAvailability(InventoryItem inventoryItem)
+    private Dictionary<InventoryItem, int> GetAvailabilities()
     {
-      if (_isBuyingMode)
+      var availabilities = new Dictionary<InventoryItem, int>();
+
+      foreach (var config in GetAvailableConfigs())
       {
-        return _stock[inventoryItem];
+        if (_isBuyingMode)
+        {
+          if (!availabilities.ContainsKey(config.InventoryItem))
+          {
+            _stockSold.TryGetValue(config.InventoryItem, out var sold);
+            availabilities[config.InventoryItem] = -sold;
+          }
+
+          availabilities[config.InventoryItem] += config.InitialStock;
+        }
+        else
+        {
+          // selling mode
+          // return the inventory items
+          availabilities[config.InventoryItem] = CountItemsInInventory(config.InventoryItem);
+        }
       }
 
-      return CountItemsInInventory(inventoryItem);
+      return availabilities;
+    }
+
+    private Dictionary<InventoryItem, float> GetPrices()
+    {
+      var prices = new Dictionary<InventoryItem, float>();
+
+      foreach (var config in GetAvailableConfigs())
+      {
+        if (_isBuyingMode)
+        {
+          if (!prices.ContainsKey(config.InventoryItem))
+          {
+            prices[config.InventoryItem] = config.InventoryItem.Price;
+          }
+
+          prices[config.InventoryItem] *= (1 - config.BuyingDiscountPercentage / 100);
+        }
+        else
+        {
+          // selling case
+          // simple doesn't depend on the level
+          prices[config.InventoryItem] = config.InventoryItem.Price * sellingRate;
+        }
+      }
+
+      return prices;
+    }
+
+    private IEnumerable<StockConfig> GetAvailableConfigs()
+    {
+      var shopperLevel = GetShopperLevel();
+      foreach (var config in stockConfigs)
+      {
+        if (config.LevelToUnlock <= shopperLevel)
+        {
+          yield return config;
+        }
+      }
     }
 
     private int CountItemsInInventory(InventoryItem inventoryItem)
@@ -115,16 +171,6 @@ namespace RPG.Shops
       }
 
       return count;
-    }
-
-    private float CalculatePrice(StockConfig config)
-    {
-      if (_isBuyingMode)
-      {
-        return config.InventoryItem.Price * (1 - (config.BuyingDiscountPercentage / 100));
-      }
-
-      return config.InventoryItem.Price * sellingRate;
     }
 
     public void SelectFilter(ItemCategory category)
@@ -233,8 +279,9 @@ namespace RPG.Shops
         _transaction[item] = 0;
       }
 
-      var availability = CalculateAvailability(item);
-      print(availability);
+      var availabilities = GetAvailabilities();
+      var availability = availabilities[item];
+
       if (_transaction[item] + quantity > availability)
       {
         // we dont have enough stock
@@ -311,8 +358,13 @@ namespace RPG.Shops
       // remove the item from the player inventory
       shopperInventory.RemoveFromSlot(slot, 1);
 
+      if (!_stockSold.ContainsKey(inventoryItem))
+      {
+        _stockSold[inventoryItem] = 0; // initialise this
+      }
+
       // add the item to the shop stock
-      _stock[inventoryItem]++;
+      _stockSold[inventoryItem]--;
 
       // pay the player
       playerBalance.UpdateBalance(price);
@@ -352,7 +404,12 @@ namespace RPG.Shops
         // remove from transaction
         AddToTransaction(inventoryItem, -1);
 
-        _stock[inventoryItem]--;
+        if (!_stockSold.ContainsKey(inventoryItem))
+        {
+          _stockSold[inventoryItem] = 0; // initialise this
+        }
+
+        _stockSold[inventoryItem]++;
 
         // Debiting or crediting of funds
         playerBalance.UpdateBalance(-price);
@@ -387,6 +444,40 @@ namespace RPG.Shops
 
 
       return distance < 2f;
+    }
+
+    /// <summary>
+    /// gets the current shopper (player) level
+    /// </summary>
+    /// <returns></returns>
+    private int GetShopperLevel()
+    {
+      var stats = _currentShopper.GetComponent<BaseStats>();
+
+      return stats == null ? 0 : stats.GetPlayerLevel();
+    }
+
+    public object CaptureState()
+    {
+      var dictToSave = new Dictionary<string, int>();
+
+      foreach (var pair in _stockSold)
+      {
+        dictToSave[pair.Key.ItemId] = pair.Value;
+      }
+
+      return dictToSave;
+    }
+
+    public void RestoreState(object state)
+    {
+      var saveObject = (Dictionary<string, int>) state;
+      _stockSold.Clear();
+
+      foreach (var pair in saveObject)
+      {
+        _stockSold[InventoryItem.GetFromID(pair.Key)] = pair.Value;
+      }
     }
   }
 }
