@@ -574,7 +574,7 @@ GameObject:
   - component: {fileID: 219540697}
   - component: {fileID: 219540696}
   - component: {fileID: 219540695}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain_(-150.0, 0.0, -150.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -709,7 +709,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: stockConfigs.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: StockConfigs.Array.data[0].Item
@@ -780,6 +780,10 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
+      propertyPath: stockConfigs.Array.data[5].InitialStock
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: stockConfigs.Array.data[0].InventoryItem
       value: 
       objectReference: {fileID: 11400000, guid: 62285a3161f1e4681b130cebe7d59058, type: 2}
@@ -820,6 +824,14 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
+      propertyPath: stockConfigs.Array.data[5].InventoryItem
+      value: 
+      objectReference: {fileID: 11400000, guid: 0b506ff2b22794491a5dd5697a1f16ae, type: 2}
+    - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
+      propertyPath: stockConfigs.Array.data[5].LevelToUnlock
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: StockConfigs.Array.data[1].BuyingDiscountPercentage
       value: 41.3
       objectReference: {fileID: 0}
@@ -842,6 +854,10 @@ PrefabInstance:
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: stockConfigs.Array.data[4].BuyingDiscountPercentage
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
+      propertyPath: stockConfigs.Array.data[5].BuyingDiscountPercentage
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9108472071336956965, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: uniqueIdentifier
@@ -926,7 +942,7 @@ GameObject:
   - component: {fileID: 297735101}
   - component: {fileID: 297735100}
   - component: {fileID: 297735099}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain_(-150.0, 0.0, -50.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1037,7 +1053,7 @@ GameObject:
   - component: {fileID: 343924895}
   - component: {fileID: 343924894}
   - component: {fileID: 343924893}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain_(-50.0, 0.0, -150.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1296,7 +1312,7 @@ GameObject:
   - component: {fileID: 508060473}
   - component: {fileID: 508060472}
   - component: {fileID: 508060471}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain_(50.0, 0.0, -50.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1836,7 +1852,7 @@ GameObject:
   - component: {fileID: 754789873}
   - component: {fileID: 754789872}
   - component: {fileID: 754789871}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain_(50.0, 0.0, -150.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2109,6 +2125,10 @@ PrefabInstance:
     - target: {fileID: 2043865929038360028, guid: fa26c6e56f69e490f922754e431311b9, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2043865929038360028, guid: fa26c6e56f69e490f922754e431311b9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 2538351631674486593, guid: fa26c6e56f69e490f922754e431311b9, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2787,7 +2807,7 @@ GameObject:
   - component: {fileID: 919951173}
   - component: {fileID: 919951172}
   - component: {fileID: 919951171}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain_(50.0, 0.0, 50.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3336,7 +3356,7 @@ GameObject:
   - component: {fileID: 1094774144}
   - component: {fileID: 1094774143}
   - component: {fileID: 1094774142}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain_(-50.0, 0.0, 50.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3442,7 +3462,7 @@ GameObject:
   - component: {fileID: 1112081766}
   - component: {fileID: 1112081765}
   - component: {fileID: 1112081764}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3995,7 +4015,7 @@ GameObject:
   - component: {fileID: 1378675916}
   - component: {fileID: 1378675915}
   - component: {fileID: 1378675914}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain_(-150.0, 0.0, 50.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8502,7 +8522,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9166554730960430491, guid: 75821e71f5eab4c01b21e4726e95442f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -570.7499
+      value: -570.75
       objectReference: {fileID: 0}
     - target: {fileID: 9166932928503856347, guid: 75821e71f5eab4c01b21e4726e95442f, type: 3}
       propertyPath: m_AnchorMax.x

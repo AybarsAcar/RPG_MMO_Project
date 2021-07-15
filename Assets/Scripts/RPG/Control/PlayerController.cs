@@ -2,6 +2,7 @@ using System;
 using RPG.Core;
 using RPG.Movement;
 using RPG.Attributes;
+using RPG.Inventories;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
@@ -22,21 +23,21 @@ namespace RPG.Control
 
     [SerializeField] private float maxNavMeshProjectionDistance = 1f;
 
-    private Camera _mainCamera;
+    [SerializeField] private int numberOfAbilities = 6;
 
     private Mover _mover;
     private ActionScheduler _actionScheduler;
     private Health _health;
+    private ActionStore _actionStore;
 
-    private bool _isDragginUI; // is updated when interacting with the UI
+    private bool _isDraggingUI; // is updated when interacting with the UI
 
     private void Awake()
     {
-      _mainCamera = Camera.main;
-
       _mover = GetComponent<Mover>();
       _actionScheduler = GetComponent<ActionScheduler>();
       _health = GetComponent<Health>();
+      _actionStore = GetComponent<ActionStore>();
     }
 
     void Update()
@@ -50,7 +51,9 @@ namespace RPG.Control
         return;
       }
 
-      ;
+      // we can use ability and interact with movement concurrently
+      // so no return value
+      UseAbilities();
 
       if (Input.GetKeyDown(KeyCode.S))
       {
@@ -63,6 +66,24 @@ namespace RPG.Control
       if (HandlePlayerMovement()) return;
 
       SetCursor(CursorType.None);
+    }
+
+    /// <summary>
+    /// calls an ability from our ActionStore
+    /// KeyCode enum is sequential
+    /// Alpha 1 starts at 49
+    /// </summary>
+    private void UseAbilities()
+    {
+      // loop over the buttons
+      for (int i = 0; i < numberOfAbilities; i++)
+      {
+        if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+        {
+          Debug.Log("CALLED");
+          _actionStore.Use(i, gameObject);
+        }
+      }
     }
 
     /**
@@ -116,17 +137,17 @@ namespace RPG.Control
     {
       if (Input.GetMouseButtonUp(0))
       {
-        _isDragginUI = false;
+        _isDraggingUI = false;
       }
 
       if (!EventSystem.current.IsPointerOverGameObject()) return false;
 
       if (Input.GetMouseButtonDown(0))
       {
-        _isDragginUI = true;
+        _isDraggingUI = true;
       }
 
-      if (_isDragginUI)
+      if (_isDraggingUI)
       {
         return true;
       }
@@ -196,9 +217,9 @@ namespace RPG.Control
     }
 
 
-    private Ray GetMouseRay()
+    public static Ray GetMouseRay()
     {
-      return _mainCamera.ScreenPointToRay(Input.mousePosition);
+      return Camera.main.ScreenPointToRay(Input.mousePosition);
     }
 
 
