@@ -80,7 +80,6 @@ namespace RPG.Control
       {
         if (Input.GetKeyDown(KeyCode.Alpha1 + i))
         {
-          Debug.Log("CALLED");
           _actionStore.Use(i, gameObject);
         }
       }

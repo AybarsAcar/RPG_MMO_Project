@@ -92,8 +92,17 @@ namespace RPG.Combat
 
       return _currentWeapon.Value;
     }
-    
-    
+
+    /// <summary>
+    /// gets the active hand
+    /// </summary>
+    /// <returns></returns>
+    public Transform GetHandTransform(bool isRightHand)
+    {
+      return isRightHand ? rightHandTransform : leftHandTransform;
+    }
+
+
     /// <summary>
     /// Updates the weapon as 
     /// </summary>
@@ -137,12 +146,11 @@ namespace RPG.Combat
       }
     }
 
-
-    /**
-       * Animation Event
-       * this is by adding an animation key so we trigger this at that point
-       * this is the melee attack animation event
-       */
+    /// <summary>
+    /// Animation Event
+    /// this is by adding an animation key so we trigger this at that point 
+    /// this is the melee attack animation event
+    /// </summary>
     private void Hit()
     {
       if (_target == null) return;
@@ -153,7 +161,7 @@ namespace RPG.Combat
       {
         _currentWeapon.Value.OnHit();
       }
-      
+
       if (_currentWeaponConfig.HasProjectile())
       {
         _currentWeaponConfig.LaunchProjectile(rightHandTransform, leftHandTransform, _target, gameObject, damage);
@@ -164,11 +172,11 @@ namespace RPG.Combat
       }
     }
 
-    /**
-       * Animation Event
-       * this is by adding an animation key so we trigger this at that point
-       * this is the ranged attack animation event
-       */
+    /// <summary>
+    /// Animation Event
+    /// this is by adding an animation key so we trigger this at that point
+    /// this is the ranged attack animation event
+    /// </summary>
     private void Shoot()
     {
       Hit();

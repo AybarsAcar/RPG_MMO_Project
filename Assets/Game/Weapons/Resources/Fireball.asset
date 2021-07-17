@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: a955bc71-ef6a-4533-bb92-18e524a27eb5
   displayName: Fireball
   description: 
-  icon: {fileID: 21300000, guid: aba0f700d91d4fc4fa8c724899ab04ab, type: 3}
+  icon: {fileID: 21300000, guid: 5732dc58816b91d4dbc488b1b3c8f08b, type: 3}
   pickup: {fileID: 1747556783820013339, guid: dfb9a91e0f41e48c290f576f58f0153a, type: 3}
   isStackable: 0
   price: 1500

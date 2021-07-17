@@ -709,7 +709,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: stockConfigs.Array.size
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: StockConfigs.Array.data[0].Item
@@ -784,6 +784,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
+      propertyPath: stockConfigs.Array.data[6].InitialStock
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
+      propertyPath: stockConfigs.Array.data[7].InitialStock
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: stockConfigs.Array.data[0].InventoryItem
       value: 
       objectReference: {fileID: 11400000, guid: 62285a3161f1e4681b130cebe7d59058, type: 2}
@@ -831,6 +839,14 @@ PrefabInstance:
       propertyPath: stockConfigs.Array.data[5].LevelToUnlock
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
+      propertyPath: stockConfigs.Array.data[6].InventoryItem
+      value: 
+      objectReference: {fileID: 11400000, guid: d84bf692a765c4c0aa822168f55d2023, type: 2}
+    - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
+      propertyPath: stockConfigs.Array.data[7].InventoryItem
+      value: 
+      objectReference: {fileID: 11400000, guid: a32d6e64d2f6b4b3cb60c136dc65cb67, type: 2}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: StockConfigs.Array.data[1].BuyingDiscountPercentage
       value: 41.3

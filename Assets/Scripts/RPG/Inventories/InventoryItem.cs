@@ -42,14 +42,17 @@ namespace RPG.Inventories
 
     [Tooltip("If true, multiple items of this type can be stacked in the same inventory slot.")] [SerializeField]
     private bool isStackable = false;
+
     public bool IsStackable => isStackable;
 
     [Tooltip("The default price of the inventory item in the shop.")] [SerializeField]
     private float price;
+
     public float Price => price;
 
     [Tooltip("The Category of the inventory item, category is none if not assigned")] [SerializeField]
     private ItemCategory category = ItemCategory.None;
+
     public ItemCategory Category => category;
 
     // STATE
@@ -91,7 +94,7 @@ namespace RPG.Inventories
     }
 
     /// <summary>
-    /// Spawn the pickup gameobject into the world.
+    /// Spawn the pickup gameObject into the world.
     /// </summary>
     /// <param name="position">Where to spawn the pickup.</param>
     /// <param name="number">How many instances of the item does the pickup represent.</param>
