@@ -1,3 +1,5 @@
+using RPG.Stats;
+using RPG.Utils;
 using UnityEngine;
 
 namespace RPG.Attributes
@@ -8,36 +10,33 @@ namespace RPG.Attributes
   /// </summary>
   public class Mana : MonoBehaviour
   {
-    [SerializeField] private float maxMana = 200f;
+    private LazyValue<float> _currentMana;
 
-    [Tooltip("Mana Regen value per second")] [SerializeField]
-    private float manaRegenRate = 1;
+    public float MaxMana => GetComponent<BaseStats>().GetStat(Stat.Mana);
+    private float ManaRegenRate => GetComponent<BaseStats>().GetStat(Stat.ManaRegenRate);
 
-    public float MaxMana => maxMana;
-
-    private float _currentMana;
-    public float CurrentMana => _currentMana;
+    public float CurrentMana => _currentMana.Value;
 
     private void Awake()
     {
-      _currentMana = maxMana;
+      _currentMana = new LazyValue<float>(() => MaxMana);
     }
 
     private void Update()
     {
-      if (_currentMana < maxMana)
+      if (_currentMana.Value < MaxMana)
       {
-        _currentMana += manaRegenRate * Time.deltaTime;
+        _currentMana.Value += ManaRegenRate * Time.deltaTime;
 
-        if (_currentMana > maxMana) _currentMana = maxMana;
+        if (_currentMana.Value > MaxMana) _currentMana.Value = MaxMana;
       }
     }
 
     public bool UseMana(float manaToUse)
     {
-      if (manaToUse > _currentMana) return false;
+      if (manaToUse > _currentMana.Value) return false;
 
-      _currentMana -= manaToUse;
+      _currentMana.Value -= manaToUse;
       return true;
     }
   }

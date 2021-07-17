@@ -24,9 +24,9 @@ namespace RPG.Stats
       _experience = GetComponent<Experience>();
     }
 
-    /**
-     * OnEnable is the standard place to register for callbacks
-     */
+    /// <summary>
+    /// OnEnable is the standard place to register for callbacks
+    /// </summary>
     private void OnEnable()
     {
       if (_experience != null)
@@ -100,9 +100,11 @@ namespace RPG.Stats
       return progression.GetStat(stat, characterClass, GetPlayerLevel());
     }
 
-    /**
-     * gets the modifiers and adds it to its total
-     */
+    /// <summary>
+    /// gets the modifiers and adds it to its total
+    /// </summary>
+    /// <param name="stat"></param>
+    /// <returns></returns>
     private float GetAdditiveModifier(Stat stat)
     {
       if (!isUsingModifiers)

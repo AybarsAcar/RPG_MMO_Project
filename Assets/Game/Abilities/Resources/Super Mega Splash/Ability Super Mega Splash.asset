@@ -22,7 +22,7 @@ MonoBehaviour:
   category: 5
   isConsumable: 0
   cooldown: 5
-  manaCost: 100
+  manaCost: 60
   targetingStrategy: {fileID: 11400000, guid: 87bc8d8a2b2cd403cb3e71f68ea0f2cc, type: 2}
   filterStrategies:
   - {fileID: 11400000, guid: f1da5491061614a24bd4086a4ffd9ccd, type: 2}
