@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.Abilities
@@ -10,8 +8,8 @@ namespace RPG.Abilities
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="user">The game object using the ability - Player</param>
+    /// <param name="data">The Ability Data includes The game object using the ability - Player</param>
     /// <param name="onFinish">method callback called when the targeting finishes</param>
-    public abstract void StartTargeting(GameObject user, Action<IEnumerable<GameObject>> onFinish);
+    public abstract void StartTargeting(AbilityData data, Action onFinish);
   }
 }

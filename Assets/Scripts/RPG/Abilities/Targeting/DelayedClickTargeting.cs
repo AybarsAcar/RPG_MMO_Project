@@ -22,15 +22,14 @@ namespace RPG.Abilities.Targeting
 
     private Transform _targetingIndicator;
 
-    public override void StartTargeting(GameObject user, Action<IEnumerable<GameObject>> onFinish)
+    public override void StartTargeting(AbilityData data, Action onFinish)
     {
-      var playerController = user.GetComponent<PlayerController>();
+      var playerController = data.User.GetComponent<PlayerController>();
 
-      playerController.StartCoroutine(Targeting(user, playerController, onFinish));
+      playerController.StartCoroutine(Targeting(data, playerController, onFinish));
     }
 
-    private IEnumerator Targeting(GameObject user, PlayerController playerController,
-      Action<IEnumerable<GameObject>> onFinish)
+    private IEnumerator Targeting(AbilityData data, PlayerController playerController, Action onFinish)
     {
       playerController.enabled = false;
 
@@ -66,10 +65,16 @@ namespace RPG.Abilities.Targeting
             yield return new WaitWhile(() => Input.GetMouseButton(0));
 
             playerController.enabled = true;
-
+            
             _targetingIndicator.gameObject.SetActive(false);
 
-            onFinish(GetGameObjectsInRadius(raycastHit.point));
+            // set the mouse click position
+            data.TargetedPoint = raycastHit.point;
+            
+            // set the targets
+            data.Targets = GetGameObjectsInRadius(raycastHit.point);
+
+            onFinish();
 
             yield break;
           }

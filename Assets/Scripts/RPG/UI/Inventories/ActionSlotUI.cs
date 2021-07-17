@@ -1,61 +1,78 @@
-﻿using RPG.Inventories;
+﻿using System;
+using RPG.Abilities;
+using RPG.Core.Util;
+using RPG.Inventories;
 using RPG.Utils.UI.Dragging;
 using RPG.Utils.UI.Dragging.Inventories;
 using UnityEngine;
+using UnityEngine.UI;
+using InventoryItem = RPG.Inventories.InventoryItem;
 
 namespace RPG.UI.Inventories
 {
-    /// <summary>
-    /// The UI slot for the player action bar.
-    /// </summary>
-    public class ActionSlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
+  /// <summary>
+  /// The UI slot for the player action bar.
+  /// </summary>
+  public class ActionSlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
+  {
+    // CONFIG DATA
+    [SerializeField] private InventoryItemIcon icon = null;
+    [SerializeField] private int index = 0;
+    [SerializeField] private Image cooldownOverlay;
+
+    // CACHE
+    private ActionStore _store;
+    private CooldownStore _cooldownStore;
+
+    // LIFECYCLE METHODS
+    private void Awake()
     {
-        // CONFIG DATA
-        [SerializeField] InventoryItemIcon icon = null;
-        [SerializeField] int index = 0;
+      var player = GameObject.FindGameObjectWithTag(Tag.Player);
 
-        // CACHE
-        ActionStore store;
+      _store = player.GetComponent<ActionStore>();
+      _cooldownStore = player.GetComponent<CooldownStore>();
 
-        // LIFECYCLE METHODS
-        private void Awake()
-        {
-            store = GameObject.FindGameObjectWithTag("Player").GetComponent<ActionStore>();
-            store.StoreUpdated += UpdateIcon;
-        }
 
-        // PUBLIC
-
-        public void AddItems(InventoryItem item, int number)
-        {
-            store.AddAction(item, index, number);
-        }
-
-        public InventoryItem GetItem()
-        {
-            return store.GetAction(index);
-        }
-
-        public int GetNumber()
-        {
-            return store.GetNumber(index);
-        }
-
-        public int MaxAcceptable(InventoryItem item)
-        {
-            return store.MaxAcceptable(item, index);
-        }
-
-        public void RemoveItems(int number)
-        {
-            store.RemoveItems(index, number);
-        }
-
-        // PRIVATE
-
-        void UpdateIcon()
-        {
-            icon.SetItem(GetItem(), GetNumber());
-        }
+      _store.StoreUpdated += UpdateIcon;
     }
+
+    private void Update()
+    {
+      cooldownOverlay.fillAmount = _cooldownStore.GetCooldownFractionRemaining(GetItem());
+    }
+
+    // PUBLIC
+
+    public void AddItems(InventoryItem item, int number)
+    {
+      _store.AddAction(item, index, number);
+    }
+
+    public InventoryItem GetItem()
+    {
+      return _store.GetAction(index);
+    }
+
+    public int GetNumber()
+    {
+      return _store.GetNumber(index);
+    }
+
+    public int MaxAcceptable(InventoryItem item)
+    {
+      return _store.MaxAcceptable(item, index);
+    }
+
+    public void RemoveItems(int number)
+    {
+      _store.RemoveItems(index, number);
+    }
+
+    // PRIVATE
+
+    void UpdateIcon()
+    {
+      icon.SetItem(GetItem(), GetNumber());
+    }
+  }
 }

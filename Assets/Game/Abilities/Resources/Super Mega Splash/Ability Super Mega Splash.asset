@@ -21,4 +21,11 @@ MonoBehaviour:
   price: 50
   category: 5
   isConsumable: 0
+  cooldown: 5
+  manaCost: 100
   targetingStrategy: {fileID: 11400000, guid: 87bc8d8a2b2cd403cb3e71f68ea0f2cc, type: 2}
+  filterStrategies:
+  - {fileID: 11400000, guid: f1da5491061614a24bd4086a4ffd9ccd, type: 2}
+  effectStrategies:
+  - {fileID: 11400000, guid: b767f5de57d154c60b829985f65b94cb, type: 2}
+  - {fileID: 11400000, guid: c4bc0c3e63aa04443a2f3101d27a5d26, type: 2}
