@@ -47,8 +47,8 @@ namespace RPG.Abilities.Targeting
       // set its size to the size of the sphere raycast radius
       _targetingIndicator.localScale = new Vector3(areaOfEffectRadius * 2, 1, areaOfEffectRadius * 2);
 
-      // we need a while loop that runs every frame
-      while (true)
+      // we need a while loop that runs every frame if the player is not dead 
+      while (!data.IsCancelled)
       {
         // Runs every frame
         Cursor.SetCursor(cursorTexture, cursorHotspot, CursorMode.Auto);
@@ -64,25 +64,22 @@ namespace RPG.Abilities.Targeting
             // so we wait for the actual click when button is lifted
             yield return new WaitWhile(() => Input.GetMouseButton(0));
 
-            playerController.enabled = true;
-            
-            _targetingIndicator.gameObject.SetActive(false);
-
             // set the mouse click position
             data.TargetedPoint = raycastHit.point;
-            
+
             // set the targets
             data.Targets = GetGameObjectsInRadius(raycastHit.point);
 
-            onFinish();
-
-            yield break;
+            break;
           }
         }
 
-
         yield return null;
       }
+
+      _targetingIndicator.gameObject.SetActive(false);
+      playerController.enabled = true;
+      onFinish();
     }
 
     private IEnumerable<GameObject> GetGameObjectsInRadius(Vector3 point)

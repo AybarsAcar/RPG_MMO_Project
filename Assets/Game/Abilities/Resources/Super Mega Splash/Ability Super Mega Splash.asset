@@ -27,5 +27,6 @@ MonoBehaviour:
   filterStrategies:
   - {fileID: 11400000, guid: f1da5491061614a24bd4086a4ffd9ccd, type: 2}
   effectStrategies:
-  - {fileID: 11400000, guid: b767f5de57d154c60b829985f65b94cb, type: 2}
-  - {fileID: 11400000, guid: c4bc0c3e63aa04443a2f3101d27a5d26, type: 2}
+  - {fileID: 11400000, guid: 4bee6da51d7f44feaaf864f33d41e92a, type: 2}
+  - {fileID: 11400000, guid: 7c5262c41c0744418be290b26862b432, type: 2}
+  - {fileID: 11400000, guid: 503ca63f5b01d4101b339aaae7d011b1, type: 2}

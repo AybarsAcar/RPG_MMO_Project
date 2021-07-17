@@ -1,4 +1,5 @@
 using RPG.Attributes;
+using RPG.Core;
 using RPG.Utils.UI.Dragging.Inventories;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace RPG.Abilities
   {
     [SerializeField] private float cooldown;
     [SerializeField] private float manaCost;
-    
+
     [SerializeField] private TargetingStrategy targetingStrategy;
     [SerializeField] private FilterStrategy[] filterStrategies;
     [SerializeField] private EffectStrategy[] effectStrategies;
@@ -33,16 +34,21 @@ namespace RPG.Abilities
 
       var data = new AbilityData {User = user};
 
-      
+      // start the ability as an action so it stops the other actions
+      var actionScheduler = user.GetComponent<ActionScheduler>();
+      actionScheduler.StartAction(data);
+
       targetingStrategy.StartTargeting(data, () => TargetAcquired(data));
     }
 
     private void TargetAcquired(AbilityData data)
     {
+      if (data.IsCancelled) return;
+
       // start the cooldown timer
       var cooldownStore = data.User.GetComponent<CooldownStore>();
       var mana = data.User.GetComponent<Mana>();
-      
+
       // consume mana
       // if problem consuming mana return early
       if (!mana.UseMana(manaCost)) return;

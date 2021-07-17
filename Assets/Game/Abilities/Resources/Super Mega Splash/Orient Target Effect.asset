@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81dc1c964a7f41139a01f8900d4792f3, type: 3}
-  m_Name: Effect Super Mega Splash
+  m_Script: {fileID: 11500000, guid: ab3b6b7492ff429d895d16ed826b0bd4, type: 3}
+  m_Name: Orient Target Effect
   m_EditorClassIdentifier: 
-  healthChange: -10
