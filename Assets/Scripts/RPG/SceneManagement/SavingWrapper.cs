@@ -12,6 +12,8 @@ namespace RPG.SceneManagement
   public class SavingWrapper : MonoBehaviour
   {
     private const string CurrentSaveKey = "currentSaveName";
+    private const int FirstLevelBuildIndex = 1;
+    private const int MainMenuBuildIndex = 0;
 
     [SerializeField] private float fadeInTime = 2f;
     [SerializeField] private float fadeOutTime = 0.2f;
@@ -51,7 +53,7 @@ namespace RPG.SceneManagement
       // Fade out completely
       yield return fader.FadeOut(fadeOutTime);
 
-      yield return SceneManager.LoadSceneAsync(1);
+      yield return SceneManager.LoadSceneAsync(FirstLevelBuildIndex);
 
       //Fade in
       yield return fader.FadeIn(fadeInTime);
@@ -110,6 +112,27 @@ namespace RPG.SceneManagement
     public IEnumerable<string> ListSaves()
     {
       return GetComponent<SavingSystem>().ListSaveFiles();
+    }
+
+    /// <summary>
+    /// loads the main menu
+    /// </summary>
+    public void LoadMainMenu()
+    {
+      StartCoroutine(LoadMainMenuScene());
+    }
+    
+    private IEnumerator LoadMainMenuScene()
+    {
+      var fader = FindObjectOfType<Fader>();
+
+      // Fade out completely
+      yield return fader.FadeOut(fadeOutTime);
+
+      yield return SceneManager.LoadSceneAsync(MainMenuBuildIndex);
+
+      //Fade in
+      yield return fader.FadeIn(fadeInTime);
     }
   }
 }

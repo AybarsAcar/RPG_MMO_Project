@@ -65,7 +65,7 @@ namespace RPG.Saving
       {
         if (Path.GetExtension(path) == ".sav")
         {
-          yield return Path.GetFileName(path);
+          yield return Path.GetFileNameWithoutExtension(path);
         }
       }
     }

@@ -23,13 +23,14 @@ namespace RPG.UI
     /// </summary>
     private void OnEnable()
     {
+      var savingWrapper = FindObjectOfType<SavingWrapper>();
+      if (savingWrapper == null) return;
+
       // clear the children
       foreach (Transform child in contentRoot.transform)
       {
         Destroy(child.gameObject);
       }
-
-      var savingWrapper = FindObjectOfType<SavingWrapper>();
 
       // instantiate as the child
       foreach (var saveFile in savingWrapper.ListSaves())
