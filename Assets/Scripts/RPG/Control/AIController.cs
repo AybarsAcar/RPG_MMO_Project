@@ -4,6 +4,7 @@ using RPG.Core.Util;
 using RPG.Movement;
 using RPG.Attributes;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace RPG.Control
 {
@@ -135,12 +136,12 @@ namespace RPG.Control
       AggravateNearbyEnemies();
     }
 
-    /**
-     * Sphere cast is implemented
-     *  our sphere cast will be static around our enemies
-     * so no direction
-     * Aggravates enemies within the sphere cast
-     */
+    /// <summary>
+    /// Sphere cast is implemented
+    /// our sphere cast will be static around our enemies
+    /// so no direction
+    /// Aggravates enemies within the sphere cast
+    /// </summary>
     private void AggravateNearbyEnemies()
     {
       var hits = Physics.SphereCastAll(transform.position, shoutDistance, Vector3.up, 0f);
@@ -164,14 +165,30 @@ namespace RPG.Control
       _actionScheduler.CancelCurrentAction();
     }
 
-    /**
-     * called by Unity
-     * draws a gizmos when the gameObject with this script is selected
-     */
+    /// <summary>
+    /// called by Unity
+    /// draws a gizmos when the gameObject with this script is selected
+    /// </summary>
     private void OnDrawGizmosSelected()
     {
       Gizmos.color = Color.blue;
       Gizmos.DrawWireSphere(transform.position, chaseDistance);
+    }
+
+    /// <summary>
+    /// resets the enemy AI
+    /// called when player respawns
+    /// </summary>
+    public void Reset()
+    {
+      // warp back to the start
+      GetComponent<NavMeshAgent>().Warp(_guardPosition);
+
+      // reset the other states
+      _timeSinceLastSawPlayer = Mathf.Infinity;
+      _timeSinceArrivedAtWaypoint = Mathf.Infinity;
+      _timeSinceAggravated = Mathf.Infinity;
+      _currentWaypointIndex = 0;
     }
   }
 }

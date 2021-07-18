@@ -1,4 +1,3 @@
-using System;
 using RPG.Core;
 using RPG.Saving;
 using RPG.Stats;
@@ -11,13 +10,13 @@ namespace RPG.Attributes
   public class Health : MonoBehaviour, ISavable
   {
     [SerializeField] private UnityEvent<float> takeDamage;
-    [SerializeField] private UnityEvent onDie;
+    public UnityEvent onDie;
 
     private LazyValue<float> _health;
     public float HealthPoints => _health.Value;
 
-    private bool _isDead;
-    public bool IsDead => _isDead;
+    public bool _wasDeadLastFrame;
+    public bool IsDead => _health.Value <= 0;
 
     private const float RegenerationPercentage = 70f;
 
@@ -51,16 +50,17 @@ namespace RPG.Attributes
     {
       _health.Value = Mathf.Max(_health.Value - damage, 0);
 
-      if (_health.Value <= 0)
+      if (IsDead)
       {
         onDie.Invoke(); // play the death sfx from Unity Event
-        HandleDie();
         AwardExperience(instigator);
       }
       else
       {
         takeDamage.Invoke(damage);
       }
+
+      UpdateState();
     }
 
     private void AwardExperience(GameObject instigator)
@@ -77,19 +77,30 @@ namespace RPG.Attributes
     }
 
 
-    private void HandleDie()
+    private void UpdateState()
     {
-      if (_isDead) return;
+      var animator = GetComponent<Animator>();
+      
+      if (!_wasDeadLastFrame && IsDead)
+      {
+        animator.SetTrigger("Die");
+        GetComponent<ActionScheduler>().CancelCurrentAction(); // stop the current action when character dies        
+      }
 
-      GetComponent<Animator>().SetTrigger("Die");
-      _isDead = true;
+      if (_wasDeadLastFrame && !IsDead)
+      {
+        // revived
+        animator.Rebind();
+      }
 
-      GetComponent<ActionScheduler>().CancelCurrentAction(); // stop the current action when character dies
+      _wasDeadLastFrame = IsDead;
     }
 
     public void Heal(float amountToHeal)
     {
       _health.Value = Mathf.Min(_health.Value + amountToHeal, GetMaxHealthPoints());
+
+      UpdateState();
     }
 
     public object CaptureState()
@@ -102,11 +113,7 @@ namespace RPG.Attributes
       // restore the health points
       _health.Value = (float) state;
 
-      // die
-      if (_health.Value <= 0)
-      {
-        HandleDie();
-      }
+      UpdateState();
     }
 
     public float GetMaxHealthPoints()

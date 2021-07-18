@@ -14,25 +14,29 @@ namespace RPG.UI
   {
     [SerializeField] private Button saveButton;
     [SerializeField] private Button saveAndQuitButton;
-    
+
     private PlayerController _playerController;
 
     private void Start()
     {
       _playerController = GameObject.FindGameObjectWithTag(Tag.Player).GetComponent<PlayerController>();
-      
+
       saveButton.onClick.AddListener(Save);
       saveAndQuitButton.onClick.AddListener(SaveAndQuit);
     }
 
     private void OnEnable()
     {
+      if (_playerController == null) return;
+
       _playerController.enabled = false;
       Time.timeScale = 0;
     }
 
     private void OnDisable()
     {
+      if (_playerController == null) return;
+
       _playerController.enabled = true;
       Time.timeScale = 1;
     }
