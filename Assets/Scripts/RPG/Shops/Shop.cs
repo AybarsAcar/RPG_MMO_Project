@@ -155,12 +155,7 @@ namespace RPG.Shops
     {
       var discount = _currentShopper.GetComponent<BaseStats>().GetStat(Stat.BuyingDiscountPercentage);
 
-      print(discount);
-
-      var valueToReturn = Mathf.Min((1 - maxBarterDiscountRate), (100 - discount) / 100);
-
-
-      return valueToReturn;
+      return Mathf.Min((1 - maxBarterDiscountRate), (100 - discount) / 100);
     }
 
     private IEnumerable<StockConfig> GetAvailableConfigs()
