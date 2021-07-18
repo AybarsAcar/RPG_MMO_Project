@@ -3781,6 +3781,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 917528695, guid: f164e35d1fce143e295a2ac9f4da83da, type: 3}
+      propertyPath: loadSceneIndex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8175827995329248624, guid: f164e35d1fce143e295a2ac9f4da83da, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -8542,7 +8546,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9166554730960430491, guid: 75821e71f5eab4c01b21e4726e95442f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -570.75
+      value: -570.74927
       objectReference: {fileID: 0}
     - target: {fileID: 9166932928503856347, guid: 75821e71f5eab4c01b21e4726e95442f, type: 3}
       propertyPath: m_AnchorMax.x
@@ -8783,7 +8787,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 917528695, guid: f164e35d1fce143e295a2ac9f4da83da, type: 3}
       propertyPath: loadSceneIndex
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8175827995329248624, guid: f164e35d1fce143e295a2ac9f4da83da, type: 3}
       propertyPath: m_RootOrder

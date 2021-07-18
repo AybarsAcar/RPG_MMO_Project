@@ -1,4 +1,7 @@
-﻿namespace RPG.Utils
+﻿using System;
+using RPG.SceneManagement;
+
+namespace RPG.Utils
 {
     /// <summary>
     /// Container class that wraps a value and ensures initialisation is 

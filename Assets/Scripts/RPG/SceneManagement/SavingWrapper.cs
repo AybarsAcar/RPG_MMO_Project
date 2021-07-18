@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using RPG.Saving;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace RPG.SceneManagement
 {
@@ -9,25 +11,63 @@ namespace RPG.SceneManagement
   /// </summary>
   public class SavingWrapper : MonoBehaviour
   {
-    private const string DefaultSaveFile = "save";
-    private const float FadeInTime = 2f;
+    private const string CurrentSaveKey = "currentSaveName";
 
-    private void Awake()
+    [SerializeField] private float fadeInTime = 2f;
+    [SerializeField] private float fadeOutTime = 0.2f;
+
+    public void ContinueGame()
     {
       StartCoroutine(LoadLastScene());
     }
 
-    private IEnumerator LoadLastScene()
+    public void NewGame(string saveFile)
     {
-      yield return GetComponent<SavingSystem>().LoadLastScene(DefaultSaveFile);
+      SetCurrentSave(saveFile);
+      StartCoroutine(LoadFirstScene());
+    }
 
+    public void LoadGame(string saveFile)
+    {
+      SetCurrentSave(saveFile);
+      ContinueGame();
+    }
+    
+
+    private void SetCurrentSave(string saveFile)
+    {
+      PlayerPrefs.SetString(CurrentSaveKey, saveFile);
+    }
+
+    private string GetCurrentSave()
+    {
+      return PlayerPrefs.GetString(CurrentSaveKey);
+    }
+
+    private IEnumerator LoadFirstScene()
+    {
       var fader = FindObjectOfType<Fader>();
 
       // Fade out completely
-      fader.FadeOutImmediate();
+      yield return fader.FadeOut(fadeOutTime);
+
+      yield return SceneManager.LoadSceneAsync(1);
 
       //Fade in
-      yield return fader.FadeIn(FadeInTime);
+      yield return fader.FadeIn(fadeInTime);
+    }
+
+    private IEnumerator LoadLastScene()
+    {
+      var fader = FindObjectOfType<Fader>();
+
+      // Fade out completely
+      yield return fader.FadeOut(fadeOutTime);
+
+      yield return GetComponent<SavingSystem>().LoadLastScene(GetCurrentSave());
+
+      //Fade in
+      yield return fader.FadeIn(fadeInTime);
     }
 
     private void Update()
@@ -50,21 +90,26 @@ namespace RPG.SceneManagement
 
     public void SaveGameState()
     {
-      GetComponent<SavingSystem>().Save(DefaultSaveFile);
+      GetComponent<SavingSystem>().Save(GetCurrentSave());
     }
 
     public void LoadGameState()
     {
-      GetComponent<SavingSystem>().Load(DefaultSaveFile);
+      GetComponent<SavingSystem>().Load(GetCurrentSave());
     }
 
-    /**
-     * deletes the saving file
-     * for debugging
-     */
+    /// <summary>
+    /// deletes the saving file
+    /// for debugging
+    /// </summary>
     private void DeleteSaveFile()
     {
-      GetComponent<SavingSystem>().Delete(DefaultSaveFile);
+      GetComponent<SavingSystem>().Delete(GetCurrentSave());
+    }
+
+    public IEnumerable<string> ListSaves()
+    {
+      return GetComponent<SavingSystem>().ListSaveFiles();
     }
   }
 }

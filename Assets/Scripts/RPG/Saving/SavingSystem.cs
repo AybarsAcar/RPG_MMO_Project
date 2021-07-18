@@ -7,18 +7,20 @@ using UnityEngine.SceneManagement;
 
 namespace RPG.Saving
 {
-  /***
-   * This component provides the interface to the saving system. It provides
-   * methods to save and restore a scene
-   *
-   * This component should be created once and shared between all subsequent scenes.
-   */
+  /// <summary>
+  /// This component provides the interface to the saving system. It provides
+  /// methods to save and restore a scene
+  ///
+  /// This component should be created once and shared between all subsequent scenes.
+  /// </summary>
   public class SavingSystem : MonoBehaviour
   {
-    /**
-     * loads the last scene the player was on
-     * called from the Wrapper on Awake so the game loads from the last scene the player was in
-     */
+    /// <summary>
+    /// loads the last scene the player was on
+    /// called from the Wrapper on Awake so the game loads from the last scene the player was in
+    /// </summary>
+    /// <param name="saveFile"></param>
+    /// <returns></returns>
     public IEnumerator LoadLastScene(string saveFile)
     {
       // get state
@@ -51,6 +53,21 @@ namespace RPG.Saving
     public void Load(string saveFile)
     {
       RestoreState(LoadFile(saveFile));
+    }
+
+    /// <summary>
+    /// returns the list of save files in the directory
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<string> ListSaveFiles()
+    {
+      foreach (var path in Directory.EnumerateFiles(Application.persistentDataPath))
+      {
+        if (Path.GetExtension(path) == ".sav")
+        {
+          yield return Path.GetFileName(path);
+        }
+      }
     }
 
     private Dictionary<string, object> LoadFile(string file)
@@ -88,10 +105,11 @@ namespace RPG.Saving
     }
 
 
-    /**
-     * update the dictionary passed in
-     */
-    private void CaptureState(Dictionary<string, object> state)
+    /// <summary>
+    /// update the dictionary passed in
+    /// </summary>
+    /// <param name="state"></param>
+    private void CaptureState(IDictionary<string, object> state)
     {
       foreach (var savable in FindObjectsOfType<SavableEntity>())
       {
