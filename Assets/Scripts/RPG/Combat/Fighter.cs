@@ -44,7 +44,7 @@ namespace RPG.Combat
 
       if (_equipment)
       {
-        _equipment.equipmentUpdated += UpdateWeapon;
+        _equipment.EquipmentUpdated += UpdateWeapon;
       }
     }
 

@@ -29,6 +29,9 @@ namespace RPG.Shops
     [Tooltip("The value is a fraction")] [SerializeField] [Range(0, 1)]
     private float sellingRate = 0.6f;
 
+    [Tooltip("Maximum allowed discount on shop items based on Player Charm Trait")] [SerializeField]
+    private float maxBarterDiscountRate = 0.4f;
+
     [SerializeField] private StockConfig[] stockConfigs;
 
     [SerializeField] private string shopName;
@@ -128,7 +131,7 @@ namespace RPG.Shops
         {
           if (!prices.ContainsKey(config.InventoryItem))
           {
-            prices[config.InventoryItem] = config.InventoryItem.Price;
+            prices[config.InventoryItem] = config.InventoryItem.Price * GetBarterDiscountRate();
           }
 
           prices[config.InventoryItem] *= (1 - config.BuyingDiscountPercentage / 100);
@@ -142,6 +145,22 @@ namespace RPG.Shops
       }
 
       return prices;
+    }
+
+    /// <summary>
+    /// this discount comes from the player Charm Trait
+    /// </summary>
+    /// <returns></returns>
+    private float GetBarterDiscountRate()
+    {
+      var discount = _currentShopper.GetComponent<BaseStats>().GetStat(Stat.BuyingDiscountPercentage);
+
+      print(discount);
+
+      var valueToReturn = Mathf.Min((1 - maxBarterDiscountRate), (100 - discount) / 100);
+
+
+      return valueToReturn;
     }
 
     private IEnumerable<StockConfig> GetAvailableConfigs()
