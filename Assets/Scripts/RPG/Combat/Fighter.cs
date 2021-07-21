@@ -10,12 +10,13 @@ using UnityEngine;
 
 namespace RPG.Combat
 {
-  public class Fighter : MonoBehaviour, IAction, ISavable
+  public class Fighter : MonoBehaviour, IAction
   {
     // equals null so the compiler knows its deliberately null
     [SerializeField] private Transform rightHandTransform = null;
     [SerializeField] private Transform leftHandTransform = null;
     [SerializeField] private WeaponConfig defaultWeaponConfig;
+    [SerializeField] private float autoAttackRange = 4f;
 
     private Health _target;
     public Health Target => _target;
@@ -64,7 +65,14 @@ namespace RPG.Combat
 
       if (_target == null) return;
 
-      if (_target.IsDead) return;
+      if (_target.IsDead)
+      {
+        // auto attack behaviour
+        _target = FindNewTargetInRange();
+
+        // if no target in range stop
+        if (_target == null) return;
+      }
 
       if (_target && !IsInRange(_target.transform))
       {
@@ -75,6 +83,51 @@ namespace RPG.Combat
         // player in range so stop and attack
         _mover.Cancel();
         AttackBehavior();
+      }
+    }
+
+    /// <summary>
+    /// finds a target in range when the user dies
+    /// for Auto attacking behaviour
+    /// </summary>
+    /// <returns>the closest enemy</returns>
+    private Health FindNewTargetInRange()
+    {
+      Health enemyToAttack = null;
+      var enemyDistance = Mathf.Infinity;
+
+      foreach (var enemy in FindAllTargetsInRange())
+      {
+        var distance = Vector3.Distance(transform.position, enemy.transform.position);
+
+        if (distance < enemyDistance)
+        {
+          enemyDistance = distance;
+          enemyToAttack = enemy;
+        }
+      }
+
+      return enemyToAttack;
+    }
+
+    private IEnumerable<Health> FindAllTargetsInRange()
+    {
+      // Sphere cast around the player current location 
+      var hits = Physics.SphereCastAll(transform.position, autoAttackRange, Vector3.up, 0);
+
+      // and look for Health component player can attack
+      foreach (var hit in hits)
+      {
+        var health = hit.transform.GetComponent<Health>();
+
+        if (health == null) continue;
+
+        if (health.IsDead) continue;
+
+        // our player
+        if (health.gameObject == gameObject) continue;
+
+        yield return health;
       }
     }
 
@@ -157,6 +210,15 @@ namespace RPG.Combat
 
       var damage = GetComponent<BaseStats>().GetStat(Stat.Damage); // damage from our stats based on Level
 
+      var targetBaseStats = _target.GetComponent<BaseStats>();
+
+      if (targetBaseStats != null)
+      {
+        var defence = targetBaseStats.GetStat(Stat.Defence);
+        damage /= 1 + defence / damage;
+      }
+
+
       if (_currentWeapon.Value != null)
       {
         _currentWeapon.Value.OnHit();
@@ -201,19 +263,6 @@ namespace RPG.Combat
     private bool IsInRange(Transform targetTransform)
     {
       return Vector3.Distance(transform.position, targetTransform.position) < _currentWeaponConfig.Range;
-    }
-
-    public object CaptureState()
-    {
-      return _currentWeaponConfig.name;
-    }
-
-    public void RestoreState(object state)
-    {
-      var weaponName = (string) state;
-      var weapon = Resources.Load<WeaponConfig>(weaponName);
-
-      EquipWeapon(weapon);
     }
   }
 }

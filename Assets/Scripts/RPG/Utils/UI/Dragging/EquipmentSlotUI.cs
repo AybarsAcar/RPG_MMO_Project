@@ -6,7 +6,7 @@ using UnityEngine;
 namespace RPG.Utils.UI.Dragging
 {
   /// <summary>
-  /// An slot for the players equipment.
+  /// A slot for the players equipment.
   /// </summary>
   public class EquipmentSlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
   {

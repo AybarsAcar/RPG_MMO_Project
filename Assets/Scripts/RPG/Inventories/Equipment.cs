@@ -93,6 +93,8 @@ namespace RPG.Inventories
           _equippedItems[pair.Key] = item;
         }
       }
+
+      EquipmentUpdated?.Invoke();
     }
   }
 }

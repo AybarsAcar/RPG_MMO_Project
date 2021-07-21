@@ -7,6 +7,8 @@ namespace RPG.UI
     [SerializeField] private KeyCode toggleKey = KeyCode.Escape;
     [SerializeField] private GameObject uiContainer = null;
 
+    private bool _isUIActive;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -18,7 +20,7 @@ namespace RPG.UI
     {
       if (Input.GetKeyDown(toggleKey))
       {
-        uiContainer.SetActive(!uiContainer.activeSelf);
+        Close();
       }
     }
 
@@ -27,7 +29,7 @@ namespace RPG.UI
     /// </summary>
     public void Close()
     {
-      uiContainer.SetActive(false);
+      uiContainer.SetActive(!uiContainer.activeSelf);
     }
   }
 }
