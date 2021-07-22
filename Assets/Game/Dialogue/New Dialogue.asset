@@ -18,12 +18,54 @@ MonoBehaviour:
     childIds:
     - b
     - c
+    position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 200
+      height: 100
   - id: b
     text: Hello, yourself?
     childIds: []
+    position:
+      serializedVersion: 2
+      x: 200
+      y: 200
+      width: 200
+      height: 100
+  - id: c
+    text: This is hello
+    childIds: []
+    position:
+      serializedVersion: 2
+      x: 0
+      y: 400
+      width: 200
+      height: 100
+  - id: d
+    text: Go away!
+    childIds: []
+    position:
+      serializedVersion: 2
+      x: 400
+      y: 0
+      width: 200
+      height: 100
+  - id: e
+    text: Fuck off!
+    childIds: []
+    position:
+      serializedVersion: 2
+      x: 600
+      y: 600
+      width: 200
+      height: 100
   - id: 
     text: 
     childIds: []
-  - id: c
-    text: Go away!
-    childIds: []
+    position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
