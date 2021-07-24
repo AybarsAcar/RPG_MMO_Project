@@ -7,65 +7,9 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 21a5bf999c16448f977d752d68eb7262, type: 3}
   m_Name: New Dialogue
   m_EditorClassIdentifier: 
-  nodes:
-  - id: a
-    text: Hello
-    childIds:
-    - b
-    - c
-    position:
-      serializedVersion: 2
-      x: 0
-      y: 0
-      width: 200
-      height: 100
-  - id: b
-    text: Hello, yourself?
-    childIds: []
-    position:
-      serializedVersion: 2
-      x: 200
-      y: 200
-      width: 200
-      height: 100
-  - id: c
-    text: This is hello
-    childIds: []
-    position:
-      serializedVersion: 2
-      x: 0
-      y: 400
-      width: 200
-      height: 100
-  - id: d
-    text: Go away!
-    childIds: []
-    position:
-      serializedVersion: 2
-      x: 400
-      y: 0
-      width: 200
-      height: 100
-  - id: e
-    text: Fuck off!
-    childIds: []
-    position:
-      serializedVersion: 2
-      x: 600
-      y: 600
-      width: 200
-      height: 100
-  - id: 
-    text: 
-    childIds: []
-    position:
-      serializedVersion: 2
-      x: 0
-      y: 0
-      width: 0
-      height: 0
+  nodes: []

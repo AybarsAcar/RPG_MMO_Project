@@ -15,7 +15,30 @@ MonoBehaviour:
   nodes:
   - id: 1
     text: Hello bruhs
+    childIds:
+    - 48e4d9c4-6213-4c89-868d-78621e02b58a
+    - bfdf22b2-c196-42a0-9f44-aa9bc77540f0
+    rect:
+      serializedVersion: 2
+      x: 118
+      y: 236
+      width: 200
+      height: 100
+  - id: bfdf22b2-c196-42a0-9f44-aa9bc77540f0
+    text: 
     childIds: []
-  - id: 2
-    text: Hello mate!!
+    rect:
+      serializedVersion: 2
+      x: 571
+      y: 166
+      width: 200
+      height: 100
+  - id: 48e4d9c4-6213-4c89-868d-78621e02b58a
+    text: 
     childIds: []
+    rect:
+      serializedVersion: 2
+      x: 516
+      y: 373
+      width: 200
+      height: 100
