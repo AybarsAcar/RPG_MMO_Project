@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace RPG.Dialogue
 {
   [CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogue/New Dialogue", order = 0)]
-  public class Dialogue : ScriptableObject
+  public class Dialogue : ScriptableObject, ISerializationCallbackReceiver
   {
     [SerializeField] private List<DialogueNode> nodes = new List<DialogueNode>();
 
@@ -14,14 +15,6 @@ namespace RPG.Dialogue
 #if UNITY_EDITOR
     private void Awake()
     {
-      if (nodes.Count == 0)
-      {
-        var rootNode = new DialogueNode {id = Guid.NewGuid().ToString()};
-
-        // add a default node
-        nodes.Add(rootNode);
-      }
-
       // so its called when built as well
       OnValidate();
     }
@@ -32,11 +25,16 @@ namespace RPG.Dialogue
     /// </summary>
     private void OnValidate()
     {
+      if (nodes.Count == 0)
+      {
+        CreateNode(null);
+      }
+
       _nodeLookup.Clear();
 
       foreach (var dialogueNode in nodes)
       {
-        _nodeLookup[dialogueNode.id] = dialogueNode;
+        _nodeLookup[dialogueNode.name] = dialogueNode;
       }
     }
 
@@ -68,17 +66,27 @@ namespace RPG.Dialogue
 
     /// <summary>
     /// Creates a Dialogue node as a child
+    /// creates a child node if parent is passed, if not creates the initial root node
     /// </summary>
     /// <param name="parent">Parent node of the newly created node</param>
-    public void CreateNode(DialogueNode parent)
+    public void CreateNode(DialogueNode parent = null)
     {
-      var child = new DialogueNode {id = Guid.NewGuid().ToString()};
-      
-      parent.childIds.Add(child.id);
-      
+      var child = CreateInstance<DialogueNode>();
+      child.name = Guid.NewGuid().ToString();
+
+      Undo.RegisterCreatedObjectUndo(child, "CreatedDialogueNode");
+
+      if (parent != null)
+      {
+        parent.childIds.Add(child.name);
+      }
+
       // added to the global nodes
       nodes.Add(child);
-      
+
+      // add the node as a sub-object to the Dialogue
+      AssetDatabase.AddObjectToAsset(child, this);
+
       // to redraw the GUI
       OnValidate();
     }
@@ -90,14 +98,43 @@ namespace RPG.Dialogue
     public void DeleteNode(DialogueNode nodeToDelete)
     {
       nodes.Remove(nodeToDelete);
-      
+
       OnValidate();
 
       // clean the children
       foreach (var dialogueNode in nodes)
       {
-        dialogueNode.childIds.Remove(nodeToDelete.id);
+        dialogueNode.childIds.Remove(nodeToDelete.name);
       }
+
+      // immediately destroys the object
+      // in Unity's C++ backend
+      Undo.DestroyObjectImmediate(nodeToDelete);
+    }
+
+    /// <summary>
+    /// called when about to save the asset to the Hard drive
+    /// </summary>
+    public void OnBeforeSerialize()
+    {
+      var path = AssetDatabase.GetAssetPath(this);
+      if (path == string.Empty) return;
+
+      foreach (var dialogueNode in nodes)
+      {
+        if (AssetDatabase.GetAssetPath(dialogueNode) == string.Empty)
+        {
+          // add it to the asset database
+          AssetDatabase.AddObjectToAsset(dialogueNode, this);
+        }
+      }
+    }
+
+    /// <summary>
+    /// called when the file is loaded from the hard drive
+    /// </summary>
+    public void OnAfterDeserialize()
+    {
     }
   }
 }
