@@ -85,6 +85,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventorySize: 16
+--- !u!114 &2662831502156175734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3230346191585565944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a752de99db4d8a9d785bed0417615d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _respawnLocation: {fileID: 0}
+  respawnDelay: 2
+  fadeTime: 0.2
+  healthRegenPercentage: 0.6
+  enemyHealthRegenRate: 0.8
 --- !u!114 &2785332642145723057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fad2173d212045a39f4915916e50ecf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2662831502156175734
+--- !u!114 &3298281101037789088
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -223,10 +240,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3230346191585565944}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36a752de99db4d8a9d785bed0417615d, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f2bb3c1e0264ad1a9fcabcf84887ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _respawnLocation: {fileID: 0}
+  currentDialogue: {fileID: 11400000, guid: c3d225a117ee74234a4c4e77f6be45d6, type: 2}
 --- !u!1001 &3419899240646236881
 PrefabInstance:
   m_ObjectHideFlags: 0

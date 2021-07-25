@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,6 +11,8 @@ namespace RPG.Dialogue
   public class Dialogue : ScriptableObject, ISerializationCallbackReceiver
   {
     [SerializeField] private List<DialogueNode> nodes = new List<DialogueNode>();
+
+    [SerializeField] private Vector2 newNodeOffset = new Vector2(250f, 0);
 
     private Dictionary<string, DialogueNode> _nodeLookup = new Dictionary<string, DialogueNode>();
 
@@ -55,7 +59,7 @@ namespace RPG.Dialogue
     /// <returns></returns>
     public IEnumerable<DialogueNode> GetAllChildren(DialogueNode parentNode)
     {
-      foreach (var childId in parentNode.childIds)
+      foreach (var childId in parentNode.ChildIds)
       {
         if (_nodeLookup.ContainsKey(childId))
         {
@@ -64,6 +68,8 @@ namespace RPG.Dialogue
       }
     }
 
+
+#if UNITY_EDITOR
     /// <summary>
     /// Creates a Dialogue node as a child
     /// creates a child node if parent is passed, if not creates the initial root node
@@ -78,8 +84,12 @@ namespace RPG.Dialogue
 
       if (parent != null)
       {
-        parent.childIds.Add(child.name);
+        parent.AddChild(child.name);
+        child.SetIsPlayerSpeaking(!parent.IsPlayerSpeaking);
+        child.SetPosition(parent.Rect.position + newNodeOffset);
       }
+
+      Undo.RecordObject(this, "Added Dialogue Node");
 
       // added to the global nodes
       nodes.Add(child);
@@ -97,6 +107,8 @@ namespace RPG.Dialogue
     /// <param name="nodeToDelete"></param>
     public void DeleteNode(DialogueNode nodeToDelete)
     {
+      Undo.RecordObject(this, "Added Dialogue Node");
+
       nodes.Remove(nodeToDelete);
 
       OnValidate();
@@ -104,7 +116,7 @@ namespace RPG.Dialogue
       // clean the children
       foreach (var dialogueNode in nodes)
       {
-        dialogueNode.childIds.Remove(nodeToDelete.name);
+        dialogueNode.RemoveChild(nodeToDelete.name);
       }
 
       // immediately destroys the object
@@ -112,11 +124,15 @@ namespace RPG.Dialogue
       Undo.DestroyObjectImmediate(nodeToDelete);
     }
 
+#endif
+
     /// <summary>
     /// called when about to save the asset to the Hard drive
     /// </summary>
     public void OnBeforeSerialize()
     {
+#if UNITY_EDITOR
+
       var path = AssetDatabase.GetAssetPath(this);
       if (path == string.Empty) return;
 
@@ -128,6 +144,8 @@ namespace RPG.Dialogue
           AssetDatabase.AddObjectToAsset(dialogueNode, this);
         }
       }
+
+#endif
     }
 
     /// <summary>
@@ -135,6 +153,16 @@ namespace RPG.Dialogue
     /// </summary>
     public void OnAfterDeserialize()
     {
+    }
+
+    public IEnumerable<DialogueNode> GetPlayerChildren(DialogueNode currentNode)
+    {
+      return GetAllChildren(currentNode).Where(dialogueNode => dialogueNode.IsPlayerSpeaking);
+    }
+
+    public IEnumerable<DialogueNode> GetAIChildren(DialogueNode currentNode)
+    {
+      return GetAllChildren(currentNode).Where(dialogueNode => !dialogueNode.IsPlayerSpeaking);
     }
   }
 }
