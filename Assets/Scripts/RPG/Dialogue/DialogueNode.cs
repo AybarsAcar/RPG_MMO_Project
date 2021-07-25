@@ -23,6 +23,15 @@ namespace RPG.Dialogue
     [SerializeField] private Rect rect = new Rect(0, 0, 200, 100);
     public Rect Rect => rect;
 
+    // action called when the dialogue enters the node
+    [SerializeField] private string onEnterAction;
+    public string OnEnterAction => onEnterAction;
+
+    // the action called when the node is exited
+    [SerializeField] private string onExitAction;
+    public string OnExitAction => onExitAction;
+
+
 #if UNITY_EDITOR
 
     public void SetPosition(Vector2 newPosition)

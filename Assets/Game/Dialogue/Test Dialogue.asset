@@ -1,5 +1,52 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8845640301683437381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: d6161fca-8d97-4514-a8ae-15073fe56013
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  text: Fuck off cunt!
+  childIds:
+  - ffc077c3-30ba-49ae-bbd7-4b90e5073859
+  rect:
+    serializedVersion: 2
+    x: 1018
+    y: 555
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+--- !u!114 &-7619281471587914578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: 2ad1b214-f598-4977-a5d4-8f4730932ae5
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  text: You got yourself in trouble
+  childIds: []
+  rect:
+    serializedVersion: 2
+    x: 1302
+    y: 97
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: Attack
 --- !u!114 &-7472087233103612627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22,6 +69,8 @@ MonoBehaviour:
     y: 556
     width: 200
     height: 100
+  onEnterAction: 
+  onExitAction: 
 --- !u!114 &-6782847718500686639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36,13 +85,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerSpeaking: 0
   text: Not bad, not bad..
-  childIds: []
+  childIds:
+  - d6161fca-8d97-4514-a8ae-15073fe56013
   rect:
     serializedVersion: 2
-    x: 767
-    y: 556
+    x: 768
+    y: 555
     width: 200
     height: 100
+  onEnterAction: 
+  onExitAction: 
 --- !u!114 &-3591559558133781495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +118,8 @@ MonoBehaviour:
     y: 374
     width: 200
     height: 100
+  onEnterAction: 
+  onExitAction: 
 --- !u!114 &-2600295452101849117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +142,32 @@ MonoBehaviour:
     y: 292
     width: 200
     height: 100
+  onEnterAction: 
+  onExitAction: 
+--- !u!114 &-2061322648347201173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: d145f5b9-affb-4558-ab08-715b009a83cd
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  text: You got a problem mate?
+  childIds:
+  - 2ad1b214-f598-4977-a5d4-8f4730932ae5
+  rect:
+    serializedVersion: 2
+    x: 1052
+    y: 97
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
 --- !u!114 &-1527801093874529862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,6 +189,8 @@ MonoBehaviour:
     y: 431
     width: 200
     height: 100
+  onEnterAction: 
+  onExitAction: 
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +214,34 @@ MonoBehaviour:
   - {fileID: 3354665339566144101}
   - {fileID: -1527801093874529862}
   - {fileID: -6782847718500686639}
+  - {fileID: -2061322648347201173}
+  - {fileID: -8845640301683437381}
+  - {fileID: -7619281471587914578}
+  - {fileID: 48837034356833468}
   newNodeOffset: {x: 250, y: 0}
+--- !u!114 &48837034356833468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: ffc077c3-30ba-49ae-bbd7-4b90e5073859
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  text: You got yourself in trouble
+  childIds: []
+  rect:
+    serializedVersion: 2
+    x: 1268
+    y: 555
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: Attack
 --- !u!114 &352557630025019099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,13 +256,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerSpeaking: 0
   text: Hmmm.. Pretty casual
-  childIds: []
+  childIds:
+  - d145f5b9-affb-4558-ab08-715b009a83cd
   rect:
     serializedVersion: 2
     x: 820
     y: 97
     width: 200
     height: 100
+  onEnterAction: 
+  onExitAction: TestAIExitAction
 --- !u!114 &1506926622892112621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +290,8 @@ MonoBehaviour:
     y: 300
     width: 200
     height: 100
+  onEnterAction: TestRootEntry
+  onExitAction: 
 --- !u!114 &3354665339566144101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,6 +313,8 @@ MonoBehaviour:
     y: 292
     width: 200
     height: 100
+  onEnterAction: 
+  onExitAction: 
 --- !u!114 &3781275826393649116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,15 +328,17 @@ MonoBehaviour:
   m_Name: 0db4962f-8439-4be7-8346-8f838748632d
   m_EditorClassIdentifier: 
   isPlayerSpeaking: 1
-  text: Yow!
+  text: How ya going?
   childIds:
   - d06424a7-f6cc-4c11-b6b4-cf633b610bf4
   rect:
     serializedVersion: 2
-    x: 517
-    y: 191
+    x: 515
+    y: 190
     width: 200
     height: 100
+  onEnterAction: TestSelectionEntry
+  onExitAction: 
 --- !u!114 &5549611703345100464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,3 +361,5 @@ MonoBehaviour:
     y: 431
     width: 200
     height: 100
+  onEnterAction: 
+  onExitAction: 

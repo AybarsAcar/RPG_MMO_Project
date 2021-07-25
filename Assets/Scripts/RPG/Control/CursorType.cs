@@ -8,6 +8,7 @@ namespace RPG.Control
     UI,
     Pickup,
     FullInventory,
+    Dialogue,
     Shop
   }
 }

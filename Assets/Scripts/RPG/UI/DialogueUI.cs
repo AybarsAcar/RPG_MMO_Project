@@ -9,9 +9,14 @@ namespace RPG.UI
   public class DialogueUI : MonoBehaviour
   {
     [SerializeField] private TextMeshProUGUI aiText;
+    [SerializeField] private TextMeshProUGUI conversantName;
+
     [SerializeField] private Button nextButton;
+    [SerializeField] private Button quitButton;
+
     [SerializeField] private Transform choiceRoot; // Player response choices
     [SerializeField] private GameObject aiResponse; // AI Response part
+
     [SerializeField] private GameObject choiceButtonPrefab;
 
     private PlayerConversant _playerConversant;
@@ -20,20 +25,22 @@ namespace RPG.UI
     {
       _playerConversant = GameObject.FindGameObjectWithTag(Tag.Player).GetComponent<PlayerConversant>();
 
-      nextButton.onClick.AddListener(Next);
+      _playerConversant.OnConversationUpdated += UpdateUI;
 
-      UpdateUI();
-    }
-
-    private void Next()
-    {
-      _playerConversant.Next();
+      nextButton.onClick.AddListener(() => _playerConversant.Next());
+      quitButton.onClick.AddListener(() => _playerConversant.Quit());
 
       UpdateUI();
     }
 
     private void UpdateUI()
     {
+      gameObject.SetActive(_playerConversant.IsActive());
+
+      if (!_playerConversant.IsActive()) return;
+
+      conversantName.text = _playerConversant.GetCurrentConversantName();
+      
       aiResponse.SetActive(!_playerConversant.IsPlayerChoosing);
       choiceRoot.gameObject.SetActive(_playerConversant.IsPlayerChoosing);
 
@@ -65,12 +72,7 @@ namespace RPG.UI
         tmp.text = choice.Text;
 
         var button = choiceInstance.GetComponentInChildren<Button>();
-        button.onClick.AddListener(() =>
-        {
-          _playerConversant.SelectChoice(choice);
-          
-          UpdateUI();
-        });
+        button.onClick.AddListener(() => { _playerConversant.SelectChoice(choice); });
       }
     }
   }

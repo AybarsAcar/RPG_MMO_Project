@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace RPG.Dialogue
 {
@@ -10,20 +12,41 @@ namespace RPG.Dialogue
   /// </summary>
   public class PlayerConversant : MonoBehaviour
   {
-    [SerializeField] private Dialogue currentDialogue;
-
+    [SerializeField] private string displayName;
+    
+    private Dialogue _currentDialogue;
     private DialogueNode _currentNode;
+    private AIConversant _currentAiConversant;
+
+    // called each time there is a change to the conversation
+    // subscribed form the DialogueUI and triggers RefreshUI
+    public event Action OnConversationUpdated;
 
     // returns true if it's players turn to speak
     // choice buttons are displayed
     private bool _isPlayerChoosing;
     public bool IsPlayerChoosing => _isPlayerChoosing;
 
-    private void Awake()
+    public bool IsActive()
     {
-      _currentNode = currentDialogue.GetRootNode();
+      return _currentDialogue != null;
     }
-    
+
+    /// <summary>
+    /// Starts the dialogue in the event
+    /// </summary>
+    /// <param name="dialogue"></param>
+    public void StartDialogue(AIConversant currentAiConversant, Dialogue dialogue)
+    {
+      _currentAiConversant = currentAiConversant;
+      _currentDialogue = dialogue;
+      _currentNode = _currentDialogue.GetRootNode();
+
+      TriggerEnterAction();
+
+      OnConversationUpdated?.Invoke();
+    }
+
     /// <summary>
     /// returns the text property of the current node
     /// </summary>
@@ -40,17 +63,27 @@ namespace RPG.Dialogue
     /// <returns></returns>
     public void Next()
     {
-      var numOfPlayerResponses = currentDialogue.GetPlayerChildren(_currentNode).Count();
+      var numOfPlayerResponses = _currentDialogue.GetPlayerChildren(_currentNode).Count();
 
       if (numOfPlayerResponses > 0)
       {
         _isPlayerChoosing = true;
+
+        TriggerExitAction();
+
+        OnConversationUpdated?.Invoke();
         return;
       }
 
-      var nodes = currentDialogue.GetAIChildren(_currentNode).ToArray();
+      var nodes = _currentDialogue.GetAIChildren(_currentNode).ToArray();
+
+      TriggerExitAction();
 
       _currentNode = nodes[Random.Range(0, nodes.Length)];
+
+      TriggerEnterAction();
+
+      OnConversationUpdated?.Invoke();
     }
 
 
@@ -60,7 +93,7 @@ namespace RPG.Dialogue
     /// <returns></returns>
     public bool HasNext()
     {
-      return currentDialogue.GetAllChildren(_currentNode).Any();
+      return _currentDialogue.GetAllChildren(_currentNode).Any();
     }
 
     /// <summary>
@@ -69,7 +102,7 @@ namespace RPG.Dialogue
     /// <returns></returns>
     public IEnumerable<DialogueNode> GetChoices()
     {
-      return currentDialogue.GetPlayerChildren(_currentNode);
+      return _currentDialogue.GetPlayerChildren(_currentNode);
     }
 
     /// <summary>
@@ -80,10 +113,66 @@ namespace RPG.Dialogue
     public void SelectChoice(DialogueNode chosenNode)
     {
       _currentNode = chosenNode;
+
+      TriggerEnterAction();
+
       _isPlayerChoosing = false;
-      
+
       // automatically advance to the next part in dialogue
       Next();
+    }
+
+    /// <summary>
+    /// sets the current dialogue and node states to null
+    /// </summary>
+    public void Quit()
+    {
+      _currentDialogue = null;
+
+      TriggerExitAction();
+
+      _currentNode = null;
+      _isPlayerChoosing = false;
+
+      _currentAiConversant = null;
+
+      OnConversationUpdated?.Invoke();
+    }
+
+    private void TriggerEnterAction()
+    {
+      if (_currentNode != null)
+      {
+        TriggerAction(_currentNode.OnEnterAction);
+      }
+    }
+
+    private void TriggerExitAction()
+    {
+      if (_currentNode != null)
+      {
+        TriggerAction(_currentNode.OnExitAction);
+      }
+    }
+
+    private void TriggerAction(string action)
+    {
+      if (action == string.Empty) return;
+
+      foreach (var trigger in _currentAiConversant.GetComponents<DialogueTrigger>())
+      {
+        trigger.Trigger(action);
+      }
+    }
+
+    public string GetCurrentConversantName()
+    {
+      if (_isPlayerChoosing)
+      {
+        return displayName != string.Empty ? displayName : "Player";
+      }
+      
+      return _currentAiConversant.DisplayName != string.Empty ? _currentAiConversant.DisplayName : "Default Enemy";
     }
   }
 }
