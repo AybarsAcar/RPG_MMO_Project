@@ -25,6 +25,7 @@ namespace RPG.UI
     }
 
     /// <summary>
+    /// Toggles it
     /// called by the quit button on click on Unity Editor
     /// </summary>
     public void Close()

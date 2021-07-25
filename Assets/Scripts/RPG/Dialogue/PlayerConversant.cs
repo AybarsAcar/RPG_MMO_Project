@@ -35,6 +35,7 @@ namespace RPG.Dialogue
     /// <summary>
     /// Starts the dialogue in the event
     /// </summary>
+    /// <param name="currentAiConversant"></param>
     /// <param name="dialogue"></param>
     public void StartDialogue(AIConversant currentAiConversant, Dialogue dialogue)
     {

@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f2bb3c1e0264ad1a9fcabcf84887ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testDialogue: {fileID: 11400000, guid: c3d225a117ee74234a4c4e77f6be45d6, type: 2}
+  displayName: 
 --- !u!114 &5485297297913972426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,6 +247,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fad2173d212045a39f4915916e50ecf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4548251207289787030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3230346191585565944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 939792eafc69403687d4121f616a3651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statuses:
+  - quest: {fileID: 11400000, guid: 3653f5b7eed9744f1a191e9213f30ee4, type: 2}
+    completedObjectives:
+    - First step
+    - Second Step
+  - quest: {fileID: 11400000, guid: fa8dfd5bc54b04af29716cd64ad02ff1, type: 2}
+    completedObjectives: []
 --- !u!1001 &3419899240646236881
 PrefabInstance:
   m_ObjectHideFlags: 0
