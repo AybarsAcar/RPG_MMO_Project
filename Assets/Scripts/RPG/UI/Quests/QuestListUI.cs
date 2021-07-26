@@ -1,4 +1,6 @@
+using System;
 using RPG.Core.Util;
+using RPG.Inventories;
 using RPG.Quests;
 using UnityEngine;
 
@@ -19,16 +21,16 @@ namespace RPG.UI.Quests
       _questList = GameObject.FindGameObjectWithTag(Tag.Player).GetComponent<QuestList>();
 
       _questList.OnUpdate += Redraw;
-      
+
       Redraw();
     }
 
     private void Redraw()
     {
       // clear first
-      foreach (GameObject child in transform)
+      foreach (Transform child in transform)
       {
-        Destroy(child);
+        Destroy(child.gameObject);
       }
 
       foreach (var status in _questList.GetStatuses())

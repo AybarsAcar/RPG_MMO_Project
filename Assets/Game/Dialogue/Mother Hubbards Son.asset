@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerSpeaking: 1
   text: Do I look like a doctor?
-  childIds: []
+  childIds:
+  - d60ef95c-1e62-41b2-918f-341f2f09ad62
   rect:
     serializedVersion: 2
     x: 735
@@ -23,6 +24,29 @@ MonoBehaviour:
     height: 100
   onEnterAction: 
   onExitAction: 
+--- !u!114 &-1936354572336793881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: d60ef95c-1e62-41b2-918f-341f2f09ad62
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  text: Okay, sorry...
+  childIds: []
+  rect:
+    serializedVersion: 2
+    x: 985
+    y: 249
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: TestObjective
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40,6 +64,7 @@ MonoBehaviour:
   - {fileID: -3391732762466506725}
   - {fileID: 7878602565462059505}
   - {fileID: 5062660840435752315}
+  - {fileID: -1936354572336793881}
   newNodeOffset: {x: 250, y: 0}
 --- !u!114 &5062660840435752315
 MonoBehaviour:

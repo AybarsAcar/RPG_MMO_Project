@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Mother Hubbers Quest
   m_EditorClassIdentifier: 
   objectives:
-  - Talk to the Shopper
-  - Buy footcream
-  - Return the footcream to Mr Hubbard
+  - reference: 1
+    description: Get a footcream
+  rewards:
+  - number: 1
+    item: {fileID: 11400000, guid: 0dee86d9ba8254427b14af527621027b, type: 2}
