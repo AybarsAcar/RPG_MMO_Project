@@ -17,6 +17,7 @@ namespace RPG.Utils.UI.Dragging.Inventories
     // CONFIG DATA
     [Tooltip("Does an instance of this item get consumed every time it's used.")] [SerializeField]
     private bool isConsumable = false;
+
     public bool IsConsumable => isConsumable;
 
     // PUBLIC
@@ -25,9 +26,10 @@ namespace RPG.Utils.UI.Dragging.Inventories
     /// Trigger the use of this item. Override to provide functionality.
     /// </summary>
     /// <param name="user">The character that is using this action.</param>
-    public virtual void Use(GameObject user)
+    public virtual bool Use(GameObject user)
     {
       Debug.Log("Using action: " + this);
+      return false;
     }
   }
 }

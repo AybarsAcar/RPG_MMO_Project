@@ -43,9 +43,11 @@ namespace RPG.Attributes
       _health.Value = Mathf.Max(_health.Value, regenHealthPoints);
     }
 
-    /**
-     * 
-     */
+    /// <summary>
+    /// Handles taking damage
+    /// </summary>
+    /// <param name="instigator">Damage Dealer</param>
+    /// <param name="damage">Damage Amount</param>
     public void TakeDamage(GameObject instigator, float damage)
     {
       _health.Value = Mathf.Max(_health.Value - damage, 0);
@@ -80,7 +82,7 @@ namespace RPG.Attributes
     private void UpdateState()
     {
       var animator = GetComponent<Animator>();
-      
+
       if (!_wasDeadLastFrame && IsDead)
       {
         animator.SetTrigger("Die");

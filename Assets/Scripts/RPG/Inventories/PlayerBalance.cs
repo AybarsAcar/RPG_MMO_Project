@@ -8,13 +8,13 @@ namespace RPG.Inventories
   /// this class will keep track of Player's money
   /// attached to the Player prefab
   /// </summary>
-  public class PlayerBalance : MonoBehaviour, ISavable
+  public class PlayerBalance : MonoBehaviour, IItemStore, ISavable
   {
     [SerializeField] private float startingBalance = 100f;
 
     private float _currentBalance = 0;
     public float CurrentBalance => _currentBalance;
-    
+
     public event Action ONChange;
 
     private void Awake()
@@ -32,6 +32,15 @@ namespace RPG.Inventories
 
       // broadcast the balance change
       ONChange?.Invoke();
+    }
+
+    public int AddItems(InventoryItem item, int number)
+    {
+      // if not a currency don't accept it
+      if (!(item is CurrencyItem)) return 0;
+
+      UpdateBalance(item.Price * number);
+      return number;
     }
 
     public object CaptureState()

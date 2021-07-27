@@ -15,7 +15,7 @@ namespace RPG.Abilities
     [SerializeField] private FilterStrategy[] filterStrategies;
     [SerializeField] private EffectStrategy[] effectStrategies;
 
-    public override void Use(GameObject user)
+    public override bool Use(GameObject user)
     {
       var cooldownStore = user.GetComponent<CooldownStore>();
       var mana = user.GetComponent<Mana>();
@@ -23,13 +23,13 @@ namespace RPG.Abilities
       if (cooldownStore.GetCooldownTimeRemaining(this) > 0)
       {
         // cooldown in progress
-        return;
+        return false;
       }
 
       if (mana.CurrentMana < manaCost)
       {
         // not enough mana
-        return;
+        return false;
       }
 
       var data = new AbilityData {User = user};
@@ -39,6 +39,8 @@ namespace RPG.Abilities
       actionScheduler.StartAction(data);
 
       targetingStrategy.StartTargeting(data, () => TargetAcquired(data));
+
+      return true;
     }
 
     private void TargetAcquired(AbilityData data)

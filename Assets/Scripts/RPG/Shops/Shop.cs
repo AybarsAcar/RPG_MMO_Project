@@ -432,7 +432,7 @@ namespace RPG.Shops
 
     public bool HandleRaycast(PlayerController callingController)
     {
-      if (Input.GetMouseButtonDown(0) /*&& IsInInteractionDistance()*/)
+      if (Input.GetMouseButtonDown(0) && IsInInteractionDistance())
       {
         callingController.GetComponent<Shopper>().SetActiveShop(this);
       }
@@ -440,14 +440,13 @@ namespace RPG.Shops
       return true;
     }
 
+    /// <summary>
+    /// requires to be near the shop to interact
+    /// </summary>
+    /// <returns></returns>
     public CursorType GetCursorType()
     {
-      // if (IsInInteractionDistance())
-      // {
-      return CursorType.Shop;
-      // }
-
-      // return CursorType.None;
+      return IsInInteractionDistance() ? CursorType.Shop : CursorType.None;
     }
 
     private bool IsInInteractionDistance()

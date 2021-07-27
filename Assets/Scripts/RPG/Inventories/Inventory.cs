@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RPG.Core;
+using RPG.Core.Util;
 using RPG.Saving;
 using UnityEngine;
 
@@ -19,9 +20,9 @@ namespace RPG.Inventories
     private int inventorySize = 16;
 
     // STATE
-    InventorySlot[] _slots;
+    private InventorySlot[] _slots;
 
-    public struct InventorySlot
+    private struct InventorySlot
     {
       public InventoryItem Item;
       public int Number;
@@ -32,14 +33,14 @@ namespace RPG.Inventories
     /// <summary>
     /// Broadcasts when the items in the slots are added/removed.
     /// </summary>
-    public event Action inventoryUpdated;
+    public event Action InventoryUpdated;
 
     /// <summary>
     /// Convenience for getting the player's inventory.
     /// </summary>
     public static Inventory GetPlayerInventory()
     {
-      var player = GameObject.FindWithTag("Player");
+      var player = GameObject.FindWithTag(Tag.Player);
       return player.GetComponent<Inventory>();
     }
 
@@ -111,12 +112,26 @@ namespace RPG.Inventories
 
     /// <summary>
     /// Attempt to add the items to the first available slot.
+    /// if the item is currency add it to the PlayerBalance instead
     /// </summary>
     /// <param name="item">The item to add.</param>
     /// <param name="number">The number to add.</param>
     /// <returns>Whether or not the item could be added.</returns>
     public bool AddToFirstEmptySlot(InventoryItem item, int number)
     {
+      // check if the item passed in is a currency
+      foreach (var store in GetComponents<IItemStore>())
+      {
+        number -= store.AddItems(item, number);
+      }
+
+      if (number <= 0)
+      {
+        // successfully found a place to put the item other than the Inventory Slot
+        // which is PlayerBalance in this case
+        return true;
+      }
+
       var i = FindSlot(item);
 
       if (i < 0)
@@ -126,9 +141,9 @@ namespace RPG.Inventories
 
       _slots[i].Item = item;
       _slots[i].Number += number;
-      if (inventoryUpdated != null)
+      if (InventoryUpdated != null)
       {
-        inventoryUpdated();
+        InventoryUpdated();
       }
 
       return true;
@@ -179,9 +194,9 @@ namespace RPG.Inventories
         _slots[slot].Item = null;
       }
 
-      if (inventoryUpdated != null)
+      if (InventoryUpdated != null)
       {
-        inventoryUpdated();
+        InventoryUpdated();
       }
     }
 
@@ -210,9 +225,9 @@ namespace RPG.Inventories
 
       _slots[slot].Item = item;
       _slots[slot].Number += number;
-      if (inventoryUpdated != null)
+      if (InventoryUpdated != null)
       {
-        inventoryUpdated();
+        InventoryUpdated();
       }
 
       return true;
@@ -318,9 +333,9 @@ namespace RPG.Inventories
         _slots[i].Number = slotStrings[i].number;
       }
 
-      if (inventoryUpdated != null)
+      if (InventoryUpdated != null)
       {
-        inventoryUpdated();
+        InventoryUpdated();
       }
     }
   }
