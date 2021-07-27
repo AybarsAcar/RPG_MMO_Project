@@ -22,7 +22,7 @@ namespace RPG.Quests
     public class Reward
     {
       [Min(1)] public int number; // number of items to reward
-      public InventoryItem item; // the item to reward
+      public InventoryItem item;  // the item to reward
     }
 
     [Serializable]

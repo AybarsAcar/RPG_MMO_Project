@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RPG.Core;
 using RPG.Inventories;
 using RPG.Saving;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace RPG.Quests
   /// <summary>
   /// attached to the Player object
   /// </summary>
-  public class QuestList : MonoBehaviour, ISavable
+  public class QuestList : MonoBehaviour, IPredicateEvaluator, ISavable
   {
     private List<QuestStatus> _statuses = new List<QuestStatus>();
 
@@ -71,6 +72,27 @@ namespace RPG.Quests
           GetComponent<ItemDropper>().DropItem(reward.item, reward.number);
         }
       }
+    }
+    
+    /// <summary>
+    /// evaluates whether the predicate has the parameter in the inspector for the dialogue
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    public bool? Evaluate(string predicate, string[] parameters)
+    {
+      return predicate switch
+      {
+        "HasQuest" => HasQuest(Quest.GetByName(parameters[0])),
+        "CompleteQuest" => GetQuestStatus(Quest.GetByName(parameters[0])).IsComplete(),
+        _ => null
+      };
+    }
+    
+    private QuestStatus GetQuestStatus(Quest quest)
+    {
+      return _statuses.FirstOrDefault(status => status.GetQuest == quest);
     }
 
     public object CaptureState()

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using RPG.Core;
 using UnityEditor;
 using UnityEngine;
 
@@ -30,6 +32,22 @@ namespace RPG.Dialogue
     // the action called when the node is exited
     [SerializeField] private string onExitAction;
     public string OnExitAction => onExitAction;
+
+    [SerializeField] private Condition condition;
+    
+    public void SetIsPlayerSpeaking(bool b)
+    {
+      Undo.RecordObject(this, "Change Dialogue Speaker");
+
+      isPlayerSpeaking = b;
+
+      EditorUtility.SetDirty(this);
+    }
+
+    public bool CheckCondition(IEnumerable<IPredicateEvaluator> evaluators)
+    {
+      return condition.Check(evaluators);
+    }
 
 
 #if UNITY_EDITOR
@@ -71,13 +89,5 @@ namespace RPG.Dialogue
       EditorUtility.SetDirty(this);
     }
 #endif
-    public void SetIsPlayerSpeaking(bool b)
-    {
-      Undo.RecordObject(this, "Change Dialogue Speaker");
-
-      isPlayerSpeaking = b;
-
-      EditorUtility.SetDirty(this);
-    }
   }
 }

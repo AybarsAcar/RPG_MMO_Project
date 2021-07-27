@@ -1,5 +1,107 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9123826656005696135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: 6a823fd8-2520-4cb1-b637-56a6e5d56443
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  text: I have the foot cream!
+  childIds:
+  - c2dbd344-52b8-47cc-a588-e33c1c50e4bb
+  rect:
+    serializedVersion: 2
+    x: 732
+    y: 763
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and:
+    - or:
+      - predicate: HasQuest
+        parameters:
+        - Mother Hubbers Quest
+        negate: 0
+    - or:
+      - predicate: CompletedQuest
+        parameters:
+        - Mother Hubbers Quest
+        negate: 1
+    - or:
+      - predicate: HasInventoryItem
+        parameters:
+        - 812b4a09-ad99-432d-90bc-b3198f70abfb
+        negate: 0
+--- !u!114 &-7598935710097298321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: 61a440eb-a758-4d45-93bc-f65fecb5aeb8
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  text: I am already on the case
+  childIds:
+  - 80a90ee6-8337-49d0-a04a-d0de7764159a
+  rect:
+    serializedVersion: 2
+    x: 737
+    y: 580
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and:
+    - or:
+      - predicate: HasQuest
+        parameters:
+        - Mother Hubbers Quest
+        negate: 0
+    - or:
+      - predicate: CompletedQuest
+        parameters:
+        - Mother Hubbers Quest
+        negate: 1
+--- !u!114 &-6244566364430598157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: 80a90ee6-8337-49d0-a04a-d0de7764159a
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  text: Oops, bad memory
+  childIds: []
+  rect:
+    serializedVersion: 2
+    x: 986
+    y: 580
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
 --- !u!114 &-3391732762466506725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24,6 +126,8 @@ MonoBehaviour:
     height: 100
   onEnterAction: 
   onExitAction: 
+  condition:
+    and: []
 --- !u!114 &-1936354572336793881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46,7 +150,9 @@ MonoBehaviour:
     width: 200
     height: 100
   onEnterAction: 
-  onExitAction: TestObjective
+  onExitAction: 
+  condition:
+    and: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,7 +171,36 @@ MonoBehaviour:
   - {fileID: 7878602565462059505}
   - {fileID: 5062660840435752315}
   - {fileID: -1936354572336793881}
+  - {fileID: -7598935710097298321}
+  - {fileID: -6244566364430598157}
+  - {fileID: -9123826656005696135}
+  - {fileID: 5042738219921060942}
   newNodeOffset: {x: 250, y: 0}
+--- !u!114 &5042738219921060942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: c2dbd344-52b8-47cc-a588-e33c1c50e4bb
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  text: That's amazing, thank you
+  childIds: []
+  rect:
+    serializedVersion: 2
+    x: 981
+    y: 763
+    width: 200
+    height: 100
+  onEnterAction: TestObjective
+  onExitAction: 
+  condition:
+    and: []
 --- !u!114 &5062660840435752315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,6 +224,8 @@ MonoBehaviour:
     height: 100
   onEnterAction: 
   onExitAction: GiveQuest
+  condition:
+    and: []
 --- !u!114 &7878602565462059505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,11 +245,18 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 741
-    y: 436
+    y: 434
     width: 200
     height: 100
   onEnterAction: 
   onExitAction: 
+  condition:
+    and:
+    - or:
+      - predicate: HasQuest
+        parameters:
+        - Mother Hubbers Quest
+        negate: 1
 --- !u!114 &8889099306071489437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,6 +274,8 @@ MonoBehaviour:
   childIds:
   - 03bd8813-1b43-40f6-ba22-d4fb268552b6
   - 5d93b37e-ea6d-4ef4-9a78-424c18e86c84
+  - 61a440eb-a758-4d45-93bc-f65fecb5aeb8
+  - 6a823fd8-2520-4cb1-b637-56a6e5d56443
   rect:
     serializedVersion: 2
     x: 496
@@ -138,3 +284,5 @@ MonoBehaviour:
     height: 100
   onEnterAction: 
   onExitAction: 
+  condition:
+    and: []

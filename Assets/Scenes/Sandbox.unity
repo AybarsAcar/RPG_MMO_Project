@@ -779,7 +779,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: stockConfigs.Array.size
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: StockConfigs.Array.data[0].Item
@@ -862,6 +862,10 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
+      propertyPath: stockConfigs.Array.data[8].InitialStock
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: stockConfigs.Array.data[0].InventoryItem
       value: 
       objectReference: {fileID: 11400000, guid: 62285a3161f1e4681b130cebe7d59058, type: 2}
@@ -917,6 +921,10 @@ PrefabInstance:
       propertyPath: stockConfigs.Array.data[7].InventoryItem
       value: 
       objectReference: {fileID: 11400000, guid: a32d6e64d2f6b4b3cb60c136dc65cb67, type: 2}
+    - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
+      propertyPath: stockConfigs.Array.data[8].InventoryItem
+      value: 
+      objectReference: {fileID: 11400000, guid: c6707b4e2de9f4a5e97b1f1bc8993767, type: 2}
     - target: {fileID: 5084305427185487642, guid: dafb5030accd940698ae72c25aac9c8d, type: 3}
       propertyPath: StockConfigs.Array.data[1].BuyingDiscountPercentage
       value: 41.3
@@ -12496,7 +12504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9166554730960430491, guid: 75821e71f5eab4c01b21e4726e95442f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -644.8
+      value: -570.75
       objectReference: {fileID: 0}
     - target: {fileID: 9166817585629341497, guid: 75821e71f5eab4c01b21e4726e95442f, type: 3}
       propertyPath: m_SizeDelta.x

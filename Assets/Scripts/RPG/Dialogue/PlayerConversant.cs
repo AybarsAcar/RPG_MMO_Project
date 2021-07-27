@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RPG.Core;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +14,7 @@ namespace RPG.Dialogue
   public class PlayerConversant : MonoBehaviour
   {
     [SerializeField] private string displayName;
-    
+
     private Dialogue _currentDialogue;
     private DialogueNode _currentNode;
     private AIConversant _currentAiConversant;
@@ -64,7 +65,7 @@ namespace RPG.Dialogue
     /// <returns></returns>
     public void Next()
     {
-      var numOfPlayerResponses = _currentDialogue.GetPlayerChildren(_currentNode).Count();
+      var numOfPlayerResponses = FilterOnCondition(_currentDialogue.GetPlayerChildren(_currentNode)).Count();
 
       if (numOfPlayerResponses > 0)
       {
@@ -76,7 +77,7 @@ namespace RPG.Dialogue
         return;
       }
 
-      var nodes = _currentDialogue.GetAIChildren(_currentNode).ToArray();
+      var nodes = FilterOnCondition(_currentDialogue.GetAIChildren(_currentNode)).ToArray();
 
       TriggerExitAction();
 
@@ -94,7 +95,7 @@ namespace RPG.Dialogue
     /// <returns></returns>
     public bool HasNext()
     {
-      return _currentDialogue.GetAllChildren(_currentNode).Any();
+      return FilterOnCondition(_currentDialogue.GetAllChildren(_currentNode)).Any();
     }
 
     /// <summary>
@@ -103,7 +104,7 @@ namespace RPG.Dialogue
     /// <returns></returns>
     public IEnumerable<DialogueNode> GetChoices()
     {
-      return _currentDialogue.GetPlayerChildren(_currentNode);
+      return FilterOnCondition(_currentDialogue.GetPlayerChildren(_currentNode));
     }
 
     /// <summary>
@@ -140,6 +141,31 @@ namespace RPG.Dialogue
       OnConversationUpdated?.Invoke();
     }
 
+    /// <summary>
+    /// filters the dialogue nodes and returns if the condition is met on the node 
+    /// </summary>
+    /// <param name="inputs">the whole dialogue tree</param>
+    /// <returns></returns>
+    private IEnumerable<DialogueNode> FilterOnCondition(IEnumerable<DialogueNode> inputs)
+    {
+      foreach (var node in inputs)
+      {
+        if (node.CheckCondition(GetEvaluators()))
+        {
+          yield return node;
+        }
+      }
+    }
+
+    /// <summary>
+    /// Returns the evaluator of the current dialogue
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerable<IPredicateEvaluator> GetEvaluators()
+    {
+      return GetComponents<IPredicateEvaluator>();
+    }
+
     private void TriggerEnterAction()
     {
       if (_currentNode != null)
@@ -148,7 +174,7 @@ namespace RPG.Dialogue
       }
     }
 
-    private void TriggerExitAction()
+    private void TriggerExitAction() 
     {
       if (_currentNode != null)
       {
@@ -172,7 +198,7 @@ namespace RPG.Dialogue
       {
         return displayName != string.Empty ? displayName : "Player";
       }
-      
+
       return _currentAiConversant.DisplayName != string.Empty ? _currentAiConversant.DisplayName : "Default Enemy";
     }
   }
