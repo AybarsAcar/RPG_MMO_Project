@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RPG.Core;
 using RPG.Stats;
 using UnityEngine;
 
@@ -13,9 +14,19 @@ namespace RPG.Inventories
   {
     // CONFIG DATA
     [Tooltip("Where are we allowed to put this item.")] [SerializeField]
-    EquipLocation allowedEquipLocation = EquipLocation.Weapon;
+    private EquipLocation allowedEquipLocation = EquipLocation.Weapon;
+
+    [Tooltip("Conditions whether it can be equipped by the Player or not")] [SerializeField]
+    private Condition equipCondition;
 
     // PUBLIC
+
+    public bool CanEquip(EquipLocation equipLocation, Equipment equipment)
+    {
+      if (equipLocation != allowedEquipLocation) return false;
+
+      return equipCondition.Check(equipment.GetComponents<IPredicateEvaluator>());
+    }
 
     public EquipLocation GetAllowedEquipLocation()
     {

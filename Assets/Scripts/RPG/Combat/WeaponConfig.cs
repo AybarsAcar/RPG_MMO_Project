@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using RPG.Attributes;
 using RPG.Inventories;
 using RPG.Stats;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace RPG.Combat
 {
@@ -32,16 +30,20 @@ namespace RPG.Combat
 
     private const string WeaponName = "Weapon";
 
-    /**
-     * instantiates the weapon in the player hand
-     * and overrides the default animator
-     */
+    /// <summary>
+    /// instantiates the weapon in the player hand
+    /// and overrides the default animator
+    /// </summary>
+    /// <param name="rightHand"></param>
+    /// <param name="leftHand"></param>
+    /// <param name="animator"></param>
+    /// <returns></returns>
     public Weapon Spawn(Transform rightHand, Transform leftHand, Animator animator)
-    { 
+    {
       DestroyOldWeapon(rightHand, leftHand);
 
       Weapon weapon = null;
-      
+
       if (equippedPrefab != null)
       {
         var hand = isRightHanded ? rightHand : leftHand;
@@ -91,7 +93,8 @@ namespace RPG.Combat
       return projectile != null;
     }
 
-    public void LaunchProjectile(Transform rightHand, Transform leftHand, Health target, GameObject instigator, float calculatedDamage)
+    public void LaunchProjectile(Transform rightHand, Transform leftHand, Health target, GameObject instigator,
+      float calculatedDamage)
     {
       var hand = isRightHanded ? rightHand : leftHand;
 

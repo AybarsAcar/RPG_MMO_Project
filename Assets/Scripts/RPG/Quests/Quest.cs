@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RPG.Core;
 using RPG.Inventories;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ namespace RPG.Quests
     public class Reward
     {
       [Min(1)] public int number; // number of items to reward
-      public InventoryItem item;  // the item to reward
+      public InventoryItem item; // the item to reward
     }
 
     [Serializable]
@@ -30,6 +31,9 @@ namespace RPG.Quests
     {
       public string reference;
       public string description;
+
+      public Condition completionCondition;
+      public bool usesCondition = false;
     }
 
     public string Title => name;

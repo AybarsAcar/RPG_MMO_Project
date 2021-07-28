@@ -21,6 +21,14 @@ MonoBehaviour:
   price: 170
   category: 2
   allowedEquipLocation: 5
+  equipCondition:
+    and:
+    - or:
+      - predicate: MinimumTrait
+        parameters:
+        - Strength
+        - 4
+        negate: 0
   range: 2
   flatDamageBonus: 10
   percentageBonus: 0

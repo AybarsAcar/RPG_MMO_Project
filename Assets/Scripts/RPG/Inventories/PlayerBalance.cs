@@ -12,7 +12,7 @@ namespace RPG.Inventories
   {
     [SerializeField] private float startingBalance = 100f;
 
-    private float _currentBalance = 0;
+    private float _currentBalance;
     public float CurrentBalance => _currentBalance;
 
     public event Action ONChange;

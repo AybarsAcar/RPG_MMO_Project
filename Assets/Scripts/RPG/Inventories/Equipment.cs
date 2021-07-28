@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RPG.Core;
 using RPG.Saving;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace RPG.Inventories
   /// 
   /// This component should be placed on the GameObject tagged "Player".
   /// </summary>
-  public class Equipment : MonoBehaviour, ISavable
+  public class Equipment : MonoBehaviour, IPredicateEvaluator, ISavable
   {
     // STATE
     private Dictionary<EquipLocation, EquipableItem> _equippedItems = new Dictionary<EquipLocation, EquipableItem>();
@@ -42,7 +43,7 @@ namespace RPG.Inventories
     /// </summary>
     public void AddItem(EquipLocation slot, EquipableItem item)
     {
-      Debug.Assert(item.GetAllowedEquipLocation() == slot);
+      Debug.Assert(item.CanEquip(slot, this));
 
       _equippedItems[slot] = item;
 
@@ -67,6 +68,24 @@ namespace RPG.Inventories
     }
 
     // PRIVATE
+
+    public bool? Evaluate(string predicate, string[] parameters)
+    {
+      if (predicate == "HasItemEquipped")
+      {
+        foreach (var equipableItem in _equippedItems.Values)
+        {
+          if (equipableItem.ItemId == parameters[0])
+          {
+            return true;
+          }
+        }
+
+        return false;
+      }
+
+      return null;
+    }
 
     object ISavable.CaptureState()
     {

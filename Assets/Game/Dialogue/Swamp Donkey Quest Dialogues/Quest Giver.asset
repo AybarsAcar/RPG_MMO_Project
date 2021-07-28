@@ -1,0 +1,268 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9019826429934338750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: 44163c8d-a14b-47c7-a8eb-1479c62dd26d
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  text: Hey!
+  childIds:
+  - bfaca5c4-d3ea-498f-98a2-ec59fa735eb5
+  rect:
+    serializedVersion: 2
+    x: 606
+    y: 247
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and:
+    - or:
+      - predicate: HasQuest
+        parameters:
+        - Swamp Donkey
+        negate: 1
+--- !u!114 &-8710712500789171294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: 6b454d28-5d25-4b24-b0d0-30cdc6f9c7fd
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  text: Amazing!
+  childIds: []
+  rect:
+    serializedVersion: 2
+    x: 1857
+    y: 247
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-8595171572750931989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: 369150fa-0af8-49c2-9aaf-2c4860d78e37
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  text: Sure thing!
+  childIds:
+  - 6b454d28-5d25-4b24-b0d0-30cdc6f9c7fd
+  rect:
+    serializedVersion: 2
+    x: 1607
+    y: 247
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21a5bf999c16448f977d752d68eb7262, type: 3}
+  m_Name: Quest Giver
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: 699342343415407465}
+  - {fileID: -9019826429934338750}
+  - {fileID: 8983893212699778993}
+  - {fileID: 920154627734688198}
+  - {fileID: 2027405816969345354}
+  - {fileID: -8595171572750931989}
+  - {fileID: -8710712500789171294}
+  - {fileID: 2632930664302127376}
+  - {fileID: 7627907513724414008}
+  newNodeOffset: {x: 250, y: 0}
+--- !u!114 &699342343415407465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: 6940b773-bb45-4325-bbda-dde2a61f41a6
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  text: Hey! Welcome to the village
+  childIds:
+  - 44163c8d-a14b-47c7-a8eb-1479c62dd26d
+  - 153dacbd-31d4-4e16-abc0-8fded8748de1
+  rect:
+    serializedVersion: 2
+    x: 356
+    y: 247
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &920154627734688198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: f6b782f7-f41d-428b-9926-84b0cb5ee69e
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  text: I was born ready
+  childIds:
+  - bfd026ac-2e36-422f-8927-3febbcd1fb73
+  rect:
+    serializedVersion: 2
+    x: 1107
+    y: 247
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &2027405816969345354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: bfd026ac-2e36-422f-8927-3febbcd1fb73
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  text: You need to kill the Swamp Donkey
+  childIds:
+  - 369150fa-0af8-49c2-9aaf-2c4860d78e37
+  rect:
+    serializedVersion: 2
+    x: 1357
+    y: 247
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: GiveQuest
+  condition:
+    and: []
+--- !u!114 &2632930664302127376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: 153dacbd-31d4-4e16-abc0-8fded8748de1
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  text: I am not new around here
+  childIds:
+  - ab2d9f71-06b1-4fe2-993d-8838e32ae974
+  rect:
+    serializedVersion: 2
+    x: 605
+    y: 431
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and:
+    - or:
+      - predicate: HasQuest
+        parameters:
+        - Swamp Donkey
+        negate: 0
+--- !u!114 &7627907513724414008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: ab2d9f71-06b1-4fe2-993d-8838e32ae974
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  text: Sorry I have short memory...
+  childIds: []
+  rect:
+    serializedVersion: 2
+    x: 855
+    y: 431
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &8983893212699778993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525ef51a4da45c08d788f489c8abd29, type: 3}
+  m_Name: bfaca5c4-d3ea-498f-98a2-ec59fa735eb5
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  text: Are you ready for your first lesson?
+  childIds:
+  - f6b782f7-f41d-428b-9926-84b0cb5ee69e
+  rect:
+    serializedVersion: 2
+    x: 857
+    y: 247
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []

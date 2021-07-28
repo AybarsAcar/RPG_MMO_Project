@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RPG.Core;
 using RPG.Saving;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace RPG.Stats
   /// <summary>
   /// resides on the player
   /// </summary>
-  public class TraitStore : MonoBehaviour, IModifierProvider, ISavable
+  public class TraitStore : MonoBehaviour, IModifierProvider, IPredicateEvaluator, ISavable
   {
     [Serializable]
     private struct TraitBonus
@@ -135,6 +136,19 @@ namespace RPG.Stats
 
         yield return bonus * GetPoints(trait);
       }
+    }
+
+    public bool? Evaluate(string predicate, string[] parameters)
+    {
+      if (predicate == "MinimumTrait")
+      {
+        if (Enum.TryParse<Trait>(parameters[0], out var trait))
+        {
+          return GetPoints(trait) >= int.Parse(parameters[1]);
+        }
+      }
+
+      return null;
     }
 
     public object CaptureState()

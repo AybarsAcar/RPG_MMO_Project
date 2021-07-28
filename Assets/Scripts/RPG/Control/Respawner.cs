@@ -12,7 +12,7 @@ namespace RPG.Control
   /// </summary>
   public class Respawner : MonoBehaviour
   {
-    [SerializeField] private Transform _respawnLocation;
+    [SerializeField] private Transform respawnLocation;
     [SerializeField] private float respawnDelay = 2f;
     [SerializeField] private float fadeTime = 0.2f;
     [SerializeField] private float healthRegenPercentage = 0.6f;
@@ -49,7 +49,7 @@ namespace RPG.Control
       yield return fader.FadeOut(fadeTime);
 
       // set the location to start location
-      GetComponent<NavMeshAgent>().Warp(_respawnLocation.position);
+      GetComponent<NavMeshAgent>().Warp(respawnLocation.position);
 
       _health.Heal(_health.GetMaxHealthPoints() * healthRegenPercentage);
 

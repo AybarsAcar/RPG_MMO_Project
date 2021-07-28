@@ -17,6 +17,11 @@ namespace RPG.Quests
 
     public event Action OnUpdate;
 
+    private void Update()
+    {
+      CompleteObjectiveByPredicate();
+    }
+
     public IEnumerable<QuestStatus> GetStatuses()
     {
       return _statuses;
@@ -59,6 +64,28 @@ namespace RPG.Quests
       }
     }
 
+    private void CompleteObjectiveByPredicate()
+    {
+      foreach (var status in _statuses)
+      {
+        if (status.IsComplete()) continue;
+
+        var quest = status.GetQuest;
+
+        foreach (var objective in quest.GetObjectives())
+        {
+          if (status.IsObjectiveComplete(objective.reference)) continue;
+
+          if (!objective.usesCondition) continue;
+
+          if (objective.completionCondition.Check(GetComponents<IPredicateEvaluator>()))
+          {
+            CompleteObjective(quest, objective.reference);
+          }
+        }
+      }
+    }
+
     private void GiveReward(Quest quest)
     {
       foreach (var reward in quest.GetRewards())
@@ -73,7 +100,7 @@ namespace RPG.Quests
         }
       }
     }
-    
+
     /// <summary>
     /// evaluates whether the predicate has the parameter in the inspector for the dialogue
     /// </summary>
@@ -89,7 +116,7 @@ namespace RPG.Quests
         _ => null
       };
     }
-    
+
     private QuestStatus GetQuestStatus(Quest quest)
     {
       return _statuses.FirstOrDefault(status => status.GetQuest == quest);

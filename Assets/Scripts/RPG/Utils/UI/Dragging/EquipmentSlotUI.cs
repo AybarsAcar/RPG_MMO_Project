@@ -38,7 +38,7 @@ namespace RPG.Utils.UI.Dragging
     {
       var equipableItem = item as EquipableItem;
       if (equipableItem == null) return 0;
-      if (equipableItem.GetAllowedEquipLocation() != equipLocation) return 0;
+      if (!equipableItem.CanEquip(equipLocation, _playerEquipment)) return 0;
       if (GetItem() != null) return 0;
 
       return 1;
@@ -56,14 +56,7 @@ namespace RPG.Utils.UI.Dragging
 
     public int GetNumber()
     {
-      if (GetItem() != null)
-      {
-        return 1;
-      }
-      else
-      {
-        return 0;
-      }
+      return GetItem() != null ? 1 : 0;
     }
 
     public void RemoveItems(int number)
